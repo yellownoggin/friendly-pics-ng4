@@ -1,0 +1,11 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+
+/**
+ * Shared styles
+ */
+
+ .fp-site-width {
+     max-width: 960px;
+     margin: 0 auto;
+ }

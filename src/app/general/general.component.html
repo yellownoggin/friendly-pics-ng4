@@ -1,0 +1,20 @@
+<div id="" *ngFor="let post of friendlyPosts">
+  {{post.$key}}
+  <fp-comments [postKey]="post.$key"></fp-comments> 
+</div>
+
+<hr>
+<div id="" class="">
+  <a md-raised-button (click)="addNextPage()">
+    next page
+    </a>
+</div>
+
+
+<!-- <md-card class="">
+  <md-card-header>
+    <a md-button>
+
+    </a>
+  </md-card-header>
+</md-card> -->

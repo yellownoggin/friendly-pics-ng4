@@ -1,0 +1,49 @@
+    <div *ngIf="user">
+        <div id="fp-splashPage" class="dissolve-animation">
+            <div class="site-width">
+                <div class="page-splash" layout="row" layout-align="center center">
+
+                    <div class="splash-section" layout="column" flex="50">
+                        <h1 class="fp-logo">
+                                <span>
+                                    <md-icon>
+                                        insert_photo
+                                    </md-icon>
+                                </span>
+                                Friendly Pix
+                            </h1>
+                        <p>
+                            The friendliest way to share your pics.
+                        </p>
+
+                        <div class="signed-out-only" layout="column">
+                            <div class="firebaseui-auth-container">
+                                <div class="">
+                                    <a md-raised-button class="md-raised" (click)="logIn()">Sign In with Google</a>
+                                </div>
+                                <div class="">
+                                    <a md-raised-button class="md-raised" (click)="logout()">Logout</a>
+                                </div>
+                                <div class="">
+                                    <a md-raised-button class="md-raised" (click)="getCurrentUser()">Get Current User</a>
+                                </div>
+                                <div class="">
+                                    <a md-raised-button class="md-raised" (click)="getCurrentUserUid()">Get Current User Uid</a>
+                                </div>
+                            </div>
+                            <p>
+                                <a class="fp-skip" routerLink="/shell">skip sign in</a>
+                            </p>
+                            <p>
+                                <span>current user information: </span>{{user}}
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end splash -->
+
+    </div>
