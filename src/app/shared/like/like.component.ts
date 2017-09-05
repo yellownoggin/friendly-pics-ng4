@@ -14,10 +14,14 @@ export class LikeComponent implements OnInit {
 	@Input() postKey: any;
     likeStatus: boolean;
     userUid: string;
+	// TODO: what is the type? Need for proper development.
+	db: any;
 
 
 	constructor(private database: AngularFireDatabase, private auth: AuthService) {
         this.likeStatus = false;
+		// TODO: Should this not be in the constructor arguments somehow.
+		this.db = firebase.database(); // Using the traditional database api
      }
 
 	ngOnInit() {
@@ -25,12 +29,22 @@ export class LikeComponent implements OnInit {
 		this.getLikeStatus(this.postKey, this.userUid);
 	}
 
-	updateLike(likeValue) {
-		const val = false;
-		// TODO: The use of object here? Is there just a ref method to use.
+
+	/* TODO: This is in the firebase.js file in friendly: decide */
+	/* Updates the like status from the current user */
+	updateLike(likeState) {
+		const val = likeState;
+		// TODO: Why .object here? Is there just a ref method to use.
 		// Reason: why instigating structure to the reference or query.
-        const like = this.database.object(`/likes/${this.postKey}/${this.userUid}`);
-		like.set(val ? firebase.database.ServerValue.TIMESTAMP : null );
+        const like = this.db.ref(`/likes/${this.postKey}/${this.userUid}`);
+
+		like.set(val ? firebase.database.ServerValue.TIMESTAMP : null )
+			.then((res) => {
+				console.log('updateLike action successful', res);
+			})
+			.catch((e) => {
+				console.log('Error in the updateLike', e);
+			});
 	}
 
 	getLikeStatus(postId, userUid) {
