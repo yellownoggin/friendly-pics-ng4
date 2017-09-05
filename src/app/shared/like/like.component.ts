@@ -16,6 +16,7 @@ export class LikeComponent implements OnInit {
     userUid: string;
 	// TODO: what is the type? Need for proper development.
 	db: any;
+	likesCount: any;
 
 
 	constructor(private database: AngularFireDatabase, private auth: AuthService) {
@@ -27,6 +28,7 @@ export class LikeComponent implements OnInit {
 	ngOnInit() {
 		this.userUid = this.auth.getCurrentUser().uid;
 		this.getLikeStatus(this.postKey, this.userUid);
+		this.registerForLikesCount();
 	}
 
 
@@ -34,6 +36,7 @@ export class LikeComponent implements OnInit {
 	/* Updates the like status from the current user */
 	updateLike(likeState) {
 		const val = likeState;
+		this.likeStatus = likeState;
 		// TODO: Why .object here? Is there just a ref method to use.
 		// Reason: why instigating structure to the reference or query.
         const like = this.db.ref(`/likes/${this.postKey}/${this.userUid}`);
@@ -59,6 +62,16 @@ export class LikeComponent implements OnInit {
            }
 		});
 
+	}
+
+	registerForLikesCount() {
+		const r = this.database.list(`/likes/${this.postKey}`);
+
+		r.subscribe((data) => {
+			console.log(data);
+			console.log('likesCount', data.length);
+			this.likesCount = data.length;
+		});
 	}
 
 }
