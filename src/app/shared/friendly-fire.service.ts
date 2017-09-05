@@ -5,29 +5,29 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import * as firebase from 'firebase/app';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/concatMap';
-// import 'rxjs/Rx';
-// Note: importing main firebase database class
+
+import { AuthService } from './providers/auth.service';
 
 @Injectable()
 export class FriendlyFireService {
 	items: FirebaseListObservable<any[]>;
 	pageSize: number;
+	currentUser: any;
 
 	get POST_PAGE_SIZE(): number {
 		return 5;
 	}
 
-	constructor(private database: AngularFireDatabase) {
+	constructor(private database: AngularFireDatabase, private auth: AuthService) {
 		// this.pageSize = 5;
+		this.currentUser = this.auth.getCurrentUser();
 	}
 
 	/**
-	 *      1. general feed behavior  ui : general query 4 post location
-
-
+	 * 	1. Shared methods (ie. addComment, etc..)
 	 */
 	// Staging
+
 
 	getComments(postKey) {
 		const query = this.database.list(`/comments/${postKey}`, {
@@ -135,30 +135,34 @@ export class FriendlyFireService {
 
 	}
 
-
-
-
-
 	// End Of Staging
 
 
+	/**
+	 * Shared methods
+	 */
 
+	addComment(commentText, postId) {
+		const postComments = this.database.list(`/comments/${postId}`);
+		// Need current user information for comment object
+		const currentUser = this.auth.getCurrentUser();
 
+		// Create comment object...
+		const commentObject = {
+			text: commentText,
+			timestamp: Date.now(),
+			author: {
+				uid: currentUser.uid,
+				full_name: currentUser.displayName,
+				profile_picture: currentUser.photoURL
+			}
+		};
 
-	// testDatabase() {
-	//     console.log('.testDatabase called');
-	//     return this.items = this.database.list('/posts', {
-	//         query: {
-	//             orderByKey: true,
-	//             limitToLast: 5
-	//         }
-	//     });
+		postComments.push(commentObject)
+			.then((res) => {
+				console.log('New comment pushed. Comment keyId: ', res.key);
+			});
+	}
 
-	// ref('posts').orderByKey().theLimitToLast(5).once('value').then((data) => {
-	//     const entries = data.val() || {};
-	//     const entryIds = Object.keys(data.val());
-	//     console.log('entryIds', entryIds);
-	// });
-	// }
 
 }

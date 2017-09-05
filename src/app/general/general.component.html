@@ -1,6 +1,11 @@
 <div id="" *ngFor="let post of friendlyPosts">
-  {{post.$key}}
-  <fp-comments [postKey]="post.$key"></fp-comments> 
+    <div class="" style="margin-bottom: 20px">
+        {{post.$key}}
+        <fp-like [postKey]="post.$key"></fp-like>
+    </div>
+
+
+  <!-- <fp-comments [postKey]="post.$key"></fp-comments> -->
 </div>
 
 <hr>

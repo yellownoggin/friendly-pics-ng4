@@ -1,0 +1,6 @@
+<div *ngIf="likeStatus" class="">
+    <button (click)="updateLike()" name="button">Liked</button>
+</div>
+<div *ngIf="!likeStatus" class="">
+    <button (click)="updateLike()" name="button">Like</button>
+</div>

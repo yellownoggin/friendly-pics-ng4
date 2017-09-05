@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from 'angularfire2';
 import { AppMaterialModule } from './app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { GeneralComponent } from './general/general.component';
 import { SplashComponent } from './splash/splash.component';
 import { FriendlyFireService } from './shared/friendly-fire.service';
 import { CommentsComponent } from './shared/comments/comments.component';
+import { LikeComponent } from './shared/like/like.component';
 // import { SandComponent } from './sand/sand.component';
 
 export const firebaseConfig = {
@@ -32,7 +34,8 @@ export const firebaseConfig = {
     ShellComponent,
     GeneralComponent,
     SplashComponent,
-    CommentsComponent
+    CommentsComponent,
+    LikeComponent
     // SandComponent
   ],
   imports: [
@@ -42,7 +45,8 @@ export const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
