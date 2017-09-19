@@ -2,9 +2,9 @@
 <hr>
 <div id="">comments</div>
 <div class="" *ngFor="let comment of comments">
-  <div id="" class="">{{comment.author.full_name}}</div>
-  <div id="" class="">{{comment.text}}</div>
-  <div id="" class="">{{comment.timestamp}}</div>
+  <span id="" class="">{{comment.author.full_name}}</span>
+        <span id="" class="">{{comment.text}}</span>
+
 </div>
 <form #commentForm="ngForm" (ngSubmit)="submitComment(commentForm.value.comment)" novalidate autocomplete="off">
   <input [(ngModel)]="comment" type="text" name="comment" placeholder="Comment...">

@@ -15,7 +15,7 @@ export class FriendlyFireService {
 	currentUser: any;
 
 	get POST_PAGE_SIZE(): number {
-		return 5;
+		return 3;
 	}
 
 	constructor(private database: AngularFireDatabase, private auth: AuthService) {
@@ -27,13 +27,11 @@ export class FriendlyFireService {
 	 * 	1. Shared methods (ie. addComment, etc..)
 	 */
 	// Staging
-
-
 	getComments(postKey) {
 		const query = this.database.list(`/comments/${postKey}`, {
 			query: {
 				orderByKey: true,
-				limitToLast: 10
+				limitToLast: 3
 			}
 		});
 

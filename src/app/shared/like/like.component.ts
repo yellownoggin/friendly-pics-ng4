@@ -51,7 +51,6 @@ export class LikeComponent implements OnInit {
 	}
 
 	getLikeStatus(postId, userUid) {
-        console.log('postId', postId);
 		const likeObject = this.database.object(`/likes/${postId}/${userUid}`);
 
 		likeObject.subscribe((data) => {
@@ -68,8 +67,6 @@ export class LikeComponent implements OnInit {
 		const r = this.database.list(`/likes/${this.postKey}`);
 
 		r.subscribe((data) => {
-			console.log(data);
-			console.log('likesCount', data.length);
 			this.likesCount = data.length;
 		});
 	}

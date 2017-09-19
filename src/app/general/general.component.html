@@ -1,6 +1,11 @@
 <div id="" *ngFor="let post of friendlyPosts">
-    <div class="" style="margin-bottom: 20px">
+    <div class="" style="margin-bottom: 10px">
         {{post.$key}}
+        <!-- <img src="" alt=""> -->
+        <div [ngStyle]="{'background-image': 'url(' + post.author.profile_picture + ')', 'width': '30px', 'height': '30px',  'background-size': 'cover' }"></div>
+        <div>{{post.author.full_name}}</div>
+        <div>{{post.timestamp}}</div>
+        <div class="mfp-image" [style.background]="getBackgroundImage(post.thumb_url)">hello</div>
         <fp-like [postKey]="post.$key"></fp-like>
     </div>
 
