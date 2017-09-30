@@ -6,12 +6,15 @@
 
   <fp-splash [splashIt]="splashShow"></fp-splash>
 
+
   <header>
     <div class="fp-site-width">
 
       <div fxLayout="row" fxLayoutAlign="center center" style="height: 64px">
         <div fxFlex="10" style="text-align: center;">Home</div>
-        <div fxFlex="10" style="text-align: center;">Feed</div>
+        <div fxFlex="10" style="text-align: center;">
+          <a routerLink="">Feed</a>
+        </div>
         <div fxFlex="10" style="text-align: center;">User</div>
         <div fxFlex="10" style="text-align: center;">
           <a routerLink="/sand">Sand</a></div>
@@ -24,8 +27,20 @@
         <div fxFlex="10" style="text-align: center;">
           <a md-raised-button (click)="getCurrentUserUid()">Check Current User</a>
         </div>
-      </div>
 
+      </div>
+      <!-- second row of header -->
+      <div class="row2ofheader">
+        <div fxLayout="row" fxLayoutAlign="center center" style="height: 64px">
+          <div fxFlex="25" style="text-align: center;">
+            <a md-raised-button (click)="clickInputFile()">Add Pic</a>
+          </div>
+          <div fxFlex="25" style="text-align: center;">
+            <input #picInput type="file" (change)="readPicture($event)">
+            <!-- <a md-raised-button ngfSelect>Check Current User</a> -->
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 

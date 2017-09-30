@@ -4,6 +4,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AppMaterialModule } from './app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
+import { ngfModule, FileUploader, ngf } from 'angular-file';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,8 @@ import { SplashComponent } from './splash/splash.component';
 import { FriendlyFireService } from './shared/friendly-fire.service';
 import { CommentsComponent } from './shared/comments/comments.component';
 import { LikeComponent } from './shared/like/like.component';
+import { AddPictureComponent } from './add-picture/add-picture.component';
+import { UploaderService } from './shared/uploader.service';
 // import { SandComponent } from './sand/sand.component';
 
 export const firebaseConfig = {
@@ -35,7 +38,8 @@ export const firebaseConfig = {
     GeneralComponent,
     SplashComponent,
     CommentsComponent,
-    LikeComponent
+    LikeComponent,
+    AddPictureComponent
     // SandComponent
   ],
   imports: [
@@ -46,9 +50,10 @@ export const firebaseConfig = {
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
+    ngfModule
   ],
-  providers: [],
+  providers: [UploaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

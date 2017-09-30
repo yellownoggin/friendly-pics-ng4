@@ -1,0 +1,4 @@
+- how to delete something from angular cli
+- FileReader(how do you have access to this type see ed component)
+    - searched the project thinking that it's exposed by some angular component but it's not core
+    - looks like it's in typescript module/package node module 

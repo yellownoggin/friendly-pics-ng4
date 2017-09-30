@@ -6,6 +6,9 @@ import { FeedService } from '../shared/feed.service';
 import * as _ from 'lodash';
 
 
+
+
+
 @Component({
 	templateUrl: './general.component.html',
 	// TODO: need a shared css
@@ -14,21 +17,23 @@ import * as _ from 'lodash';
 })
 
 export class GeneralComponent implements OnInit {
-	e: any;
+e: any;
 	// TODO: function type?
 	nextPage: any;
 	friendlyPosts: any[];
 
 	constructor(private friendly: FriendlyFireService, private feed: FeedService, private sanitizer: DomSanitizer ) {
-
+	
 	}
+
+
+
 
 	ngOnInit() {
 		// this.friendly._getPaginatedFeed('/posts', this.friendly.POST_PAGE_SIZE);
 		this.friendly.getPosts().subscribe((data) => {
 			this.friendlyPosts = _.reverse(data[0]);
 			this.nextPage = data[1];
-
 		});
 
 	}
@@ -49,3 +54,6 @@ export class GeneralComponent implements OnInit {
 	}
 
 }
+
+
+

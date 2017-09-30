@@ -1,0 +1,10 @@
+.mfp-image {
+    background-size: cover;
+    background-position: 50% 50%;
+    box-sizing: border-box;
+    padding-top: 25%;
+    position: relative;
+    min-height: 250px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
