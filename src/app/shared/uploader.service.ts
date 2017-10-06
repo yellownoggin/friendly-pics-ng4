@@ -95,7 +95,7 @@ export class UploaderService {
 	generateImages(): Promise<any> {
 		/** 1. Convert: chosen file to data url
 		 * 3.
-		*/
+		*/ // Testing the 2 commit situation 
 
 		// 1. Convert: chosen file to data url
 		const reader = new FileReader();
