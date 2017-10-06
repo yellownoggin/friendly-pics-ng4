@@ -7,9 +7,12 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 
 import { AuthService } from './providers/auth.service';
+import { FirebaseApp } from 'angularfire2';
 
 @Injectable()
 export class FriendlyFireService {
+    tsf: any;
+    storage: any;
 	items: FirebaseListObservable<any[]>;
 	pageSize: number;
 	currentUser: any;
@@ -18,15 +21,47 @@ export class FriendlyFireService {
 		return 3;
 	}
 
-	constructor(private database: AngularFireDatabase, private auth: AuthService) {
+	constructor(private database: AngularFireDatabase,
+		private auth: AuthService, private app: FirebaseApp) {
 		// this.pageSize = 5;
+		this.storage = this.app.storage();
 		this.currentUser = this.auth.getCurrentUser();
+
+		// testing
+
 	}
 
 	/**
-	 * 	1. Shared methods (ie. addComment, etc..)
-	 */
-	// Staging
+	Staging
+	*/
+
+
+	uploadNewPicture(fullBlob, thumbBlob, fileName, text) {
+		// 1. create storage refs for the each of the files/blobs
+		// 2. put then log ou the snapshot.metadata.downloadURLs[0]
+
+		const fullRef = this.storage.ref(`${this.currentUser.uid}/full/${Date.now()}/${fileName}`);
+		this.tsf = fullRef;
+		const metadata = {
+			contentType: fullBlob.type
+		};
+
+		const fullRefTask = fullRef.put(fullBlob, metadata).then(snapshot => {
+			const url = snapshot.metadata.downloadURLs[0];
+			console.log('url in the upload', url);
+		})
+		.catch(e => {
+			console.error('Error while uploading new pic', e);
+		});
+
+	}
+
+	deleteTsf() {
+		this.tsf.delete().then((a) => {
+			console.log('a', a);
+		});
+	}
+
 	getComments(postKey) {
 		const query = this.database.list(`/comments/${postKey}`, {
 			query: {

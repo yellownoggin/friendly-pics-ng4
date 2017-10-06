@@ -1,4 +1,17 @@
- ##CHOOSE PICTURE STEP
+B. AddPicture Step (includes upload, add image caption)
+
+
+* CLASS OBJECT LOGIC
+- get values current file & preview image
+
+
+*  html 5 stuff
+
+
+
+
+
+ A. ##CHOOSE PICTURE STEP
  interface 4 choosing is shell(header)
 
 * USER INTERFACE HTML5 (basic)

@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AngularFireModule } from 'angularfire2';
 import { AppMaterialModule } from './app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +10,8 @@ import { AppComponent } from './app.component';
 import { ShellComponent } from './shell/shell.component';
 
 // New imports to update based on AngularFire2 version 4
+import { AngularFireModule } from 'angularfire2';
+import 'firebase/storage';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { GeneralComponent } from './general/general.component';
@@ -20,6 +21,8 @@ import { CommentsComponent } from './shared/comments/comments.component';
 import { LikeComponent } from './shared/like/like.component';
 import { AddPictureComponent } from './add-picture/add-picture.component';
 import { UploaderService } from './shared/uploader.service';
+import { AuthService } from "./shared/providers/auth.service";
+
 // import { SandComponent } from './sand/sand.component';
 
 export const firebaseConfig = {
@@ -53,7 +56,7 @@ export const firebaseConfig = {
     FormsModule,
     ngfModule
   ],
-  providers: [UploaderService],
+  providers: [UploaderService, FriendlyFireService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

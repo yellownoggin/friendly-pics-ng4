@@ -33,7 +33,7 @@
       <div class="row2ofheader">
         <div fxLayout="row" fxLayoutAlign="center center" style="height: 64px">
           <div fxFlex="25" style="text-align: center;">
-            <a md-raised-button (click)="clickInputFile()">Add Pic</a>
+            <a md-raised-button (click)="triggerInputFile()">Add Pic</a>
           </div>
           <div fxFlex="25" style="text-align: center;">
             <input #picInput type="file" (change)="readPicture($event)">
