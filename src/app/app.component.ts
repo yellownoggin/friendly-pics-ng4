@@ -8,6 +8,7 @@ import { UploaderService } from './shared/uploader.service';
 // Interfaces
 import { FileReaderEvent } from './model/more';
 import { Router } from '@angular/router';
+import { FriendlyFireService } from './shared/friendly-fire.service';
 
 @Component({
 	selector: 'fp-root',
@@ -26,12 +27,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 	splashShow: any;
 
 	constructor(private _auth: AuthService, private renderer: Renderer2,
-		private upload: UploaderService, private router: Router) {
+		private upload: UploaderService, private router: Router, private friendly: FriendlyFireService) {
 		this.readPicture = (e) =>  upload.readPicture(e);
 	}
 
 	ngOnInit(): void {
 		this.watchAuthState();
+
 	}
 
 	ngAfterViewInit(): void {
@@ -39,6 +41,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 	}
 
 	/** /Staging **/
+
+	deleteTsf() {
+		this.friendly.deleteTsf();
+	}
+
 
 	triggerInputFile() {
 		// TODO: Renderer2. Working on all platforms?

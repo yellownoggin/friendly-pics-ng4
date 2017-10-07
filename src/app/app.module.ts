@@ -21,7 +21,7 @@ import { CommentsComponent } from './shared/comments/comments.component';
 import { LikeComponent } from './shared/like/like.component';
 import { AddPictureComponent } from './add-picture/add-picture.component';
 import { UploaderService } from './shared/uploader.service';
-import { AuthService } from "./shared/providers/auth.service";
+import { AuthService } from './shared/providers/auth.service';
 
 // import { SandComponent } from './sand/sand.component';
 

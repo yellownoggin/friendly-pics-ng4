@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 
-import { PromiseD, HTMLInputEvent, FileReaderEvent} from '../model/more';
+import { PromiseD, HTMLInputEvent, FileReaderEvent } from '../model/more';
 import { Router } from '@angular/router';
+
 
 @Injectable()
 export class UploaderService {
@@ -56,21 +57,21 @@ export class UploaderService {
 	constructor(private router: Router) { }
 
 
-    // Store  &  converts input file for preview & upload
+	// Store  &  converts input file for preview & upload
 	readPicture(event: HTMLInputEvent) {
 		// clear previous stuff here
 		// make a clear method
 		this.currentFile = null;
 		this.previewImageUrl = '';
-        const that = this;
-        console.log('this', this);
+		const that = this;
+		console.log('this', this);
 
-        // TODO: test this
-        const pictureInput = event.target;
+		// TODO: test this
+		const pictureInput = event.target;
 
 		// Store file for later upload in service
 		const file = event.target.files[0];
-		 this.currentFile = file;
+		this.currentFile = file;
 
 		// Clear selection in file picker && put
 		this.clearFile(pictureInput);
@@ -95,7 +96,7 @@ export class UploaderService {
 	generateImages(): Promise<any> {
 		/** 1. Convert: chosen file to data url
 		 * 3.
-		*/ // Testing the 2 commit situation 
+		*/  // Testing the 2 commit situation
 
 		// 1. Convert: chosen file to data url
 		const reader = new FileReader();
@@ -105,7 +106,7 @@ export class UploaderService {
 
 		reader.readAsDataURL(this.currentFile);
 
-		const blobPromises = readerPromise.then((e: any ) => {
+		const blobPromises = readerPromise.then((e: any) => {
 			const url = e.target.result;
 			const image = new Image();
 			image.src = url;
@@ -138,7 +139,6 @@ export class UploaderService {
 
 		});
 		return blobPromises;
-
 	}
 
 
