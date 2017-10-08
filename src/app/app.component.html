@@ -17,7 +17,7 @@
         </div>
         <div fxFlex="10" style="text-align: center;">User</div>
         <div fxFlex="10" style="text-align: center;">
-          <a routerLink="/sand">Sand</a></div>
+          <a [routerLink]="['/user', currentUserUid]">My Profile</a></div>
         <div fxFlex="10" style="text-align: center;">
           <a md-raised-button (click)="logIn()">LogIn</a>
         </div>

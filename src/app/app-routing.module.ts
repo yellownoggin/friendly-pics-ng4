@@ -5,11 +5,13 @@ import { ShellComponent } from './shell/shell.component';
 import { AppComponent } from './app.component';
 import { GeneralComponent } from './general/general.component';
 import { AddPictureComponent } from './add-picture/add-picture.component';
+import { UserPageComponent } from './user-page/user-page.component';
 // import { SandComponent } from './sand/sand.component';
 
 const routes: Routes = [
   { path: '', component: GeneralComponent },
-  { path: 'addPicture', component: AddPictureComponent }
+  { path: 'addPicture', component: AddPictureComponent },
+  { path: 'user/:id', component: UserPageComponent }
   // { path: 'sand', component: SandComponent }
 ];
 
