@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { UploaderService } from '../shared/uploader.service';
 import { FriendlyFireService } from '../shared/friendly-fire.service';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
 	selector: 'fp-add-picture',
@@ -51,10 +52,16 @@ export class AddPictureComponent implements OnInit, AfterViewInit {
 				// TODO: messages: sweetalert(toast) here
 				console.log('New picture has been posted: ', postId);
 				// Check to see the current file and preview image are empty if not clear
-				console.log('checking preview image: ',  this.upload.previewImageUrl);
+				const truncatedPreviewImage = _.truncate(this.upload.previewImageUrl, {'length': 25});
+				console.log('checking preview image: ', truncatedPreviewImage);
 				console.log('checking current file: ',  this.upload.currentFile);
 
-			});
+			},
+			(error) => {
+				console.log('error in add picture call of uploadNewPic', error);
+			 }
+		);
+
 		});
 	}
 
