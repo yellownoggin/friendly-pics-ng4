@@ -22,6 +22,9 @@ import { LikeComponent } from './shared/like/like.component';
 import { AddPictureComponent } from './add-picture/add-picture.component';
 import { UploaderService } from './shared/uploader.service';
 import { AuthService } from './shared/providers/auth.service';
+import { PostComponent } from './post/post.component';
+import { UserPageComponent } from './user-page/user-page.component';
+
 
 // import { SandComponent } from './sand/sand.component';
 
@@ -42,7 +45,9 @@ export const firebaseConfig = {
     SplashComponent,
     CommentsComponent,
     LikeComponent,
-    AddPictureComponent
+    AddPictureComponent,
+    PostComponent,
+    UserPageComponent 
     // SandComponent
   ],
   imports: [
