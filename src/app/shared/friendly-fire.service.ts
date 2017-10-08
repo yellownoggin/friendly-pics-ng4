@@ -50,6 +50,32 @@ export class FriendlyFireService {
 	Staging
 	*/
 
+    deletePost(postId, pictureStorageUri, thumbStorageUri) {
+        console.log(`Deleting ${postId}`);
+
+        // CONSTRUCT/DEFINE update object for real-time database data deletion
+        const updateObject = {};
+        updateObject[`/posts/${postId}`] = null;
+        updateObject[`/people/${this.currentUser.uid}/posts/${postId}`] = null;
+        updateObject[`/feed/${this.currentUser.uid}/${postId}`] = null;
+        updateObject[`/comments/${postId}`] = null;
+        updateObject[`/likes/${postId}`] = null;
+
+        // DEFINE/CALL deleteFromDatabase promise
+        const deleteFromDatabase = this.db.ref().update(updateObject);
+
+        // IF Picture Uris DEFINE/CALL storage delete promises
+        if (pictureStorageUri) {
+            const deleteFullFromStorage = this.storage.refFromURL(pictureStorageUri).delete();
+            const deleteThumbFromStorage = this.storage.refFromURL.delete();
+            return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
+        }
+        
+        // RETURNS this promise if no picture uris
+        return deleteFromDatabase;
+    }
+
+
 
     uploadNewPicture(fullBlob, thumbBlob, fileName, text) {
         // 1. create storage refs for the each of the files/blobs
@@ -136,7 +162,7 @@ export class FriendlyFireService {
 
         });
 
-            console.log('this.tsf.databasePostRef', this.tsf.databasePostRef);
+        console.log('this.tsf.databasePostRef', this.tsf.databasePostRef);
 
     }
 
