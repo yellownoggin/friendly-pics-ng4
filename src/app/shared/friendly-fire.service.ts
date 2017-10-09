@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 import { AuthService } from './providers/auth.service';
 import { FirebaseApp } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class FriendlyFireService {
@@ -22,7 +22,7 @@ export class FriendlyFireService {
     currentUser: any;
 
     get POST_PAGE_SIZE(): number {
-        return 3;
+        return 4;
     }
 
     constructor(private database: AngularFireDatabase,
@@ -50,6 +50,12 @@ export class FriendlyFireService {
 	Staging
 	*/
 
+    getUserFeedPosts(uid) {
+        console.log('getUserFeedPosts called');
+        return this._getPaginatedFeed(`/people/${uid}/posts`, this.POST_PAGE_SIZE);
+    }
+
+
     deletePost(postId, pictureStorageUri, thumbStorageUri) {
         console.log(`Deleting ${postId}`);
 
@@ -70,7 +76,7 @@ export class FriendlyFireService {
             const deleteThumbFromStorage = this.storage.refFromURL.delete();
             return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
         }
-        
+
         // RETURNS this promise if no picture uris
         return deleteFromDatabase;
     }
