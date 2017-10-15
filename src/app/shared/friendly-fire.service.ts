@@ -86,7 +86,7 @@ export class FriendlyFireService {
 		const query = this.database.list(`${uri}`, (ref) => {
 			// Used pages beyond the first
 			if (earliestEntryId) {
-				return ref.orderByKey().limitToLast(pageSizeOne).endAt(pageSizeOne);
+				return ref.orderByKey().limitToLast(pageSizeOne).endAt(earliestEntryId);
 			}
 
 			return ref.orderByKey().limitToLast(pageSizeOne);
@@ -102,7 +102,7 @@ export class FriendlyFireService {
 				const nextStartingId = postsSnapshot.shift().payload.key;
 				// Store for pagination function
 				nextPage = () => {
-					this._getPaginatedFeedWithPostDetails(uri, pageSize, nextStartingId, fetchPostDetails);
+					return this._getPaginatedFeedWithPostDetails(uri, pageSize, nextStartingId, fetchPostDetails);
 				};
 			}
 
@@ -127,7 +127,7 @@ export class FriendlyFireService {
 				posts: userPosts,
 				next: nextPage
 			};
-		});
+		}).take(1);
 	}
 
 
@@ -171,14 +171,14 @@ export class FriendlyFireService {
 				const data = { $key, ...element.payload.val() };
 				return data;
 			});
-			
+
 			return {
 				posts: feedPosts,
 				next: nextPage
 			};
 		})
-		// TODO: not sure why need take here
-		.take(1);
+			// TODO: not sure why need take here
+			.take(1);
 
 
 	}

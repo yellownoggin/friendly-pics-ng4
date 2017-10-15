@@ -13,7 +13,7 @@ import * as firebase from 'firebase/app';
     styleUrls: ['./user-page.component.css']
 })
 export class UserPageComponent implements OnInit, AfterViewInit {
-    getNextPosts: any;
+    nextPage: any;
     userPosts: any;
     currentUser: firebase.User;
     user: Observable<firebase.User>;
@@ -29,7 +29,7 @@ export class UserPageComponent implements OnInit, AfterViewInit {
         this.getUsersFeedPosts();
     }
 
-    ngAfterViewInit() {}
+    ngAfterViewInit() { }
 
     // TODO: jsdocs  (change this to load posts like friendly-pix? and)
     // And change to loadUserFeedPage
@@ -42,14 +42,30 @@ export class UserPageComponent implements OnInit, AfterViewInit {
                     (data) => {
                         console.log('posts', data['posts']);
                         console.log('next', data['next']);
-                            this.userPosts = _.reverse(data['posts']);
-                            this.getNextPosts = data['next'];
-            },
-            (error) => { console.log('getUserFeedPosts error', error); },
-            () => { console.log('getUserFeedPosts is completed'); }
-        );
-    });
-}
+                        this.userPosts = _.reverse(data['posts']);
+                        this.nextPage = data['next'];
+                    },
+                    (error) => { console.log('getUserFeedPosts error', error); },
+                    () => { console.log('getUserFeedPosts is completed'); }
+                );
+            });
+    }
+
+
+    // TODO: Refactor all components using to a service
+    addNextPage() {
+        this.nextPage().subscribe((data) => {
+            // concatenate reversed friendlyPosts from next stage method
+            console.log('data["posts"]', data['posts']);
+
+            let nextPagePosts = data['posts'];
+            // making so descending order
+            nextPagePosts = _.reverse(nextPagePosts);
+            this.userPosts = _.concat(this.userPosts, nextPagePosts);
+            this.nextPage = data['next'];
+        });
+    }
+
 
     // this is the friendlyfire defined method called in component
     // does more than just get posts for use feed

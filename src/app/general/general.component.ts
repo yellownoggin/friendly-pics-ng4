@@ -51,6 +51,7 @@ e: any;
 
 	}
 
+	// Refactor to service with other components
 	addNextPage() {
 		this.nextPage().subscribe((data) => {
 			// concatenate reversed friendlyPosts from next stage method
