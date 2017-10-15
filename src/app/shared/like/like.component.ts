@@ -51,10 +51,10 @@ export class LikeComponent implements OnInit {
 	}
 
 	getLikeStatus(postId, userUid) {
-		const likeObject = this.database.object(`/likes/${postId}/${userUid}`);
+		const likeObject = this.database.object(`/likes/${postId}/${userUid}`).valueChanges();
 
 		likeObject.subscribe((data) => {
-			if (data.$value) {
+			if (data) {
 			   this.likeStatus = true;
            } else {
                this.likeStatus = false;
@@ -64,7 +64,7 @@ export class LikeComponent implements OnInit {
 	}
 
 	registerForLikesCount() {
-		const r = this.database.list(`/likes/${this.postKey}`);
+		const r = this.database.list(`/likes/${this.postKey}`).valueChanges(); 
 
 		r.subscribe((data) => {
 			this.likesCount = data.length;

@@ -9,7 +9,8 @@ import { UploaderService } from './shared/uploader.service';
 import { FileReaderEvent } from './model/more';
 import { Router } from '@angular/router';
 import { FriendlyFireService } from './shared/friendly-fire.service';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
+import * as firebase from 'firebase';
 
 @Component({
 	selector: 'fp-root',
@@ -20,8 +21,8 @@ import { Observable } from "rxjs/Observable";
 
 
 export class AppComponent implements OnInit, AfterViewInit {
-    currentUserUid: string;
-    getCurrentUser: () => Observable<firebase.User>;
+	currentUserUid: string;
+	getCurrentUser: () => Observable<firebase.User>;
 	readPicture: (event: any) => void;
 	@ViewChild('picInput') picInput;
 	currentFile: any;
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	constructor(private _auth: AuthService, private renderer: Renderer2,
 		private upload: UploaderService, private router: Router, private friendly: FriendlyFireService) {
-		this.readPicture = (e) =>  upload.readPicture(e);
+		this.readPicture = (e) => upload.readPicture(e);
 
 		this.getCurrentUser = () => {
 			return _auth.getAuthState();
@@ -42,11 +43,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 	ngOnInit(): void {
 		this.watchAuthState();
 		this.getCurrentUser().subscribe(
-   		 (user) => {
-   			this.currentUserUid = user.uid;
-   			console.log('uid in app:', this.currentUserUid);
-   		  }
-   	 );
+			(user) => {
+				this.currentUserUid = user.uid;
+				console.log('uid in app:', this.currentUserUid);
+			}
+		);
 
 
 	}

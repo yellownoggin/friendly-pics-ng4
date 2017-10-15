@@ -31,10 +31,22 @@ e: any;
 
 	ngOnInit() {
 		// this.friendly._getPaginatedFeed('/posts', this.friendly.POST_PAGE_SIZE);
+		// THERE IS 
 		this.friendly.getPosts().subscribe((data) => {
-			this.friendlyPosts = _.reverse(data[0]);
-			this.nextPage = data[1];
-		});
+			console.log('data in the general component', data['posts']);
+			// console.log('data in the general component', data[1]);
+			
+			this.friendlyPosts = _.reverse(data['posts']);
+			this.nextPage = data['next'];
+		},
+		(error) => {
+			console.log('get posts error general component', error);
+		},
+		() => {
+			console.log('getPosts complete');
+				
+		}
+	);
 
 	}
 

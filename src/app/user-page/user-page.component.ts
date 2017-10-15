@@ -4,6 +4,7 @@ import { FriendlyFireService } from '../shared/friendly-fire.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
+import * as firebase from 'firebase/app';
 
 
 @Component({

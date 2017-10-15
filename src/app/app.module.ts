@@ -26,8 +26,6 @@ import { PostComponent } from './post/post.component';
 import { UserPageComponent } from './user-page/user-page.component';
 
 
-// import { SandComponent } from './sand/sand.component';
-
 export const firebaseConfig = {
     apiKey: 'AIzaSyD9ItMOV_b4PlU0P68uerXoUDG_oqi74cg',
     authDomain: 'friendlypix-angular1.firebaseapp.com',
@@ -48,7 +46,6 @@ export const firebaseConfig = {
     AddPictureComponent,
     PostComponent,
     UserPageComponent 
-    // SandComponent
   ],
   imports: [
     AppMaterialModule,
