@@ -31,7 +31,8 @@ e: any;
 
 	ngOnInit() {
 		// this.friendly._getPaginatedFeed('/posts', this.friendly.POST_PAGE_SIZE);
-		// THERE IS 
+		// TODO: multiple calls in the _getPaginatedFeed needs fixing 
+		// 	- also it doesn't complete 
 		this.friendly.getPosts().subscribe((data) => {
 			console.log('data in the general component', data['posts']);
 			// console.log('data in the general component', data[1]);
@@ -53,11 +54,13 @@ e: any;
 	addNextPage() {
 		this.nextPage().subscribe((data) => {
 			// concatenate reversed friendlyPosts from next stage method
-			let nextPagePosts = data[0];
+			console.log('data["posts"]', data['posts']);
+			
+			let nextPagePosts = data['posts'];
 			// making so descending order
 			nextPagePosts = _.reverse(nextPagePosts);
 			this.friendlyPosts = _.concat(this.friendlyPosts, nextPagePosts);
-			this.nextPage = data[1];
+			this.nextPage = data['next'];
 		});
 	}
 

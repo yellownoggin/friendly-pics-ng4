@@ -9,6 +9,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/zip';
 
@@ -145,7 +146,7 @@ export class FriendlyFireService {
 			if (earliestEntryId) {
 				console.log('earlies entry id');
 
-				return ref.orderByKey().limitToLast(pageSizeOne).endAt(pageSizeOne);
+				return ref.orderByKey().limitToLast(pageSizeOne).endAt(earliestEntryId);
 			}
 
 			return ref.orderByKey().limitToLast(pageSizeOne);
@@ -155,15 +156,13 @@ export class FriendlyFireService {
 		// Using map to return as as
 		return query.snapshotChanges().map((posts) => {
 			// TODO: multiple calls in the _getPaginatedFeed needs fixing (general feed)
-			console.log('map callled');
-			console.log('posts', posts);
 
 			// Figure out if there is nextPage
 			if (posts.length > pageSize) {
 				// delete post used to identify if nextpage
 				const nextStartingId = posts.shift().payload.key;
 				nextPage = () => {
-					this._getPaginatedFeed(uri, pageSize, nextStartingId);
+					return this._getPaginatedFeed(uri, pageSize, nextStartingId);
 				};
 			}
 
@@ -172,12 +171,15 @@ export class FriendlyFireService {
 				const data = { $key, ...element.payload.val() };
 				return data;
 			});
-
+			
 			return {
 				posts: feedPosts,
 				next: nextPage
 			};
-		});
+		})
+		// TODO: not sure why need take here
+		.take(1);
+
 
 	}
 
