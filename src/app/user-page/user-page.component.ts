@@ -38,19 +38,17 @@ export class UserPageComponent implements OnInit, AfterViewInit {
                 console.log('value', value.uid);
                 this.currentUser = value;
                 this.friendly.getUserFeedPosts(this.currentUser.uid).subscribe(
-                    (posts) => {
-                        console.log('posts', posts);
-                        this.userPosts = _.reverse(posts[0]);
-                        console.log('this.userPosts', this.userPosts);
-                        this.getNextPosts = posts[1];
-                     }
-                );
+                    (data) => {
+                        console.log('posts', data['posts']);
+                        console.log('next', data['next']);
+                            this.userPosts = _.reverse(data['posts']);
+                            this.getNextPosts = data['next'];
             },
             (error) => { console.log('getUserFeedPosts error', error); },
             () => { console.log('getUserFeedPosts is completed'); }
         );
-
-    }
+    });
+}
 
     // this is the friendlyfire defined method called in component
     // does more than just get posts for use feed
