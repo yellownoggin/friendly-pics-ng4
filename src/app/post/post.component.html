@@ -2,8 +2,9 @@
   post works!
 </p>
 <!-- {{post | json}} -->
+<p>userUid: <span>{{currentUserUid | async}}</span> </p>  
 <div class="" style="margin-bottom: 10px">
-  <a *ngIf="canDeletePost" md-raised-button>DeletePost</a>
+  <a md-raised-button *ngIf="canDeletePost" (click)="deletePostWrapper(post.$key, currentUserUid, post.full_storage_uri, post.thumb_storage_uri)">DeletePost</a>
     <span>post key: </span>{{post.$key}}
     <div [ngStyle]="{'background-image': 'url(' + post.author.profile_picture + ')', 'width': '30px', 'height': '30px',  'background-size': 'cover' }"></div>
     <div>{{post.author.full_name}}</div>

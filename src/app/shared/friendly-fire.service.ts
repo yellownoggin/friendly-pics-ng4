@@ -55,6 +55,7 @@ export class FriendlyFireService {
 	*/
 
 
+
 	// End Of Staging
 
 
@@ -187,8 +188,9 @@ export class FriendlyFireService {
 	/** End Retrieving Methods  */
 
 
-
-	deletePost(postId, pictureStorageUri, thumbStorageUri) {
+	// Why no return 
+    // Needs types
+	deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
 		console.log(`Deleting ${postId}`);
 
 		// CONSTRUCT/DEFINE update object for real-time database data deletion
@@ -200,16 +202,23 @@ export class FriendlyFireService {
 		updateObject[`/likes/${postId}`] = null;
 
 		// DEFINE/CALL deleteFromDatabase promise
-		const deleteFromDatabase = this.db.ref().update(updateObject);
+		console.log('first delete from database 1st');
+		
+		const deleteFromDatabase = this.db.ref().update(updateObject).then((d) => {
+			console.log('deleteFromDatabase 1', d)
+		});
 
 		// IF Picture Uris DEFINE/CALL storage delete promises
 		if (pictureStorageUri) {
 			const deleteFullFromStorage = this.storage.refFromURL(pictureStorageUri).delete();
 			const deleteThumbFromStorage = this.storage.refFromURL.delete();
+			console.log('promise being called');
 			return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
 		}
 
 		// RETURNS this promise if no picture uris
+		console.log('deleteFromDatabase called');
+		
 		return deleteFromDatabase;
 	}
 
@@ -290,6 +299,8 @@ export class FriendlyFireService {
 
 	}
 
+
+	// TODO: remove when done
 	deleteTsf() {
 		this.tsf.storage.delete().then((a) => {
 			console.log('a', a);
