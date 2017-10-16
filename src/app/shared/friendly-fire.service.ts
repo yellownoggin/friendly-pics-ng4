@@ -63,7 +63,8 @@ export class FriendlyFireService {
 	 */
 
 	getPostData(postId) {
-		return this.database.object(`/posts/${postId}`);
+		return this.database.object(`/posts/${postId}`)
+			.snapshotChanges();
 	}
 
 
@@ -108,7 +109,7 @@ export class FriendlyFireService {
 
 			// fetchPostDetails
 			const postDetailObservablesArray = postsSnapshot.map((post) => {
-				return this.getPostData(post.payload.key).snapshotChanges();
+				return this.getPostData(post.payload.key);
 			});
 
 			return Observable.zip(...postDetailObservablesArray);

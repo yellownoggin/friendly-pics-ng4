@@ -1,3 +1,14 @@
 <p>
   post works!
 </p>
+<!-- {{post | json}} -->
+<div class="" style="margin-bottom: 10px">
+    <span>post key: </span>{{post.$key}}
+    <div [ngStyle]="{'background-image': 'url(' + post.author.profile_picture + ')', 'width': '30px', 'height': '30px',  'background-size': 'cover' }"></div>
+    <div>{{post.author.full_name}}</div>
+    <div>{{post.timestamp}}</div>
+    
+    <fp-like [postKey]="post.$key"></fp-like>
+</div>
+
+<!-- <div class="mfp-image" [style.background]="getBackgroundImage(post.thumb_url)">hello</div> -->

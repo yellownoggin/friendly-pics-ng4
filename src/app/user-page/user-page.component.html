@@ -7,6 +7,8 @@
     <!-- user posts {{userPosts | json}}   -->
 </p>
 <div id="" *ngFor="let post of userPosts">
+
+    <a [routerLink]="['/post', post.$key]">
     <div class="" style="margin-bottom: 10px">
         <span>post key: </span>{{post.$key}}
         <!-- <img src="" alt=""> -->
@@ -16,6 +18,7 @@
         <!-- <div class="mfp-image" [style.background]="getBackgroundImage(post.thumb_url)">hello</div> -->
         <fp-like [postKey]="post.$key"></fp-like>
     </div>
+</a>
 </div>
 
 
