@@ -54,13 +54,21 @@ export class FriendlyFireService {
 	Staging
 	*/
 
+	getHomeFeedPosts(userId) {
+
+		// TODO: currentUser undefined ?? but in other methods in this using it is not
+		// console.log('this.currentUser.uid', this.currentUser);
+		// return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
+		return this._getPaginatedFeedWithPostDetails(`/feed/${userId}`, this.POST_PAGE_SIZE, null, true);
+	}
+
 
 
 	// End Of Staging
 
 
 	/**
-	 * Retrieving Methods 
+	 * Retrieving Methods
 	 */
 
 	getPostData(postId) {
@@ -100,7 +108,7 @@ export class FriendlyFireService {
 
 			// Figure out and set up nextPage
 			if (postsSnapshot.length > pageSize) {
-				// First data element represents nextPageId to start with 
+				// First data element represents nextPageId to start with
 				const nextStartingId = postsSnapshot.shift().payload.key;
 				// Store for pagination function
 				nextPage = () => {
@@ -188,39 +196,40 @@ export class FriendlyFireService {
 	/** End Retrieving Methods  */
 
 
-	// Why no return 
-    // Needs types
-	deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
-		console.log(`Deleting ${postId}`);
+	// Why no return
+	// Needs types
+	// https://stackoverflow.com/questions/46779043/returned-pomises-not-resolving-when-trying-to-update-delete-multiple-locations
+		deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
+			console.log(`Deleting ${postId}`);
 
-		// CONSTRUCT/DEFINE update object for real-time database data deletion
-		const updateObject = {};
-		updateObject[`/posts/${postId}`] = null;
-		updateObject[`/people/${this.currentUser.uid}/posts/${postId}`] = null;
-		updateObject[`/feed/${this.currentUser.uid}/${postId}`] = null;
-		updateObject[`/comments/${postId}`] = null;
-		updateObject[`/likes/${postId}`] = null;
+			// CONSTRUCT/DEFINE update object for real-time database data deletion
+			const updateObject = {};
+			updateObject[`/posts/${postId}`] = null;
+			updateObject[`/people/${this.currentUser.uid}/posts/${postId}`] = null;
+			updateObject[`/feed/${this.currentUser.uid}/${postId}`] = null;
+			updateObject[`/comments/${postId}`] = null;
+			updateObject[`/likes/${postId}`] = null;
 
-		// DEFINE/CALL deleteFromDatabase promise
-		console.log('first delete from database 1st');
-		
-		const deleteFromDatabase = this.db.ref().update(updateObject).then((d) => {
-			console.log('deleteFromDatabase 1', d)
-		});
+			// DEFINE/CALL deleteFromDatabase promise
+			console.log('first delete from database 1st');
 
-		// IF Picture Uris DEFINE/CALL storage delete promises
-		if (pictureStorageUri) {
-			const deleteFullFromStorage = this.storage.refFromURL(pictureStorageUri).delete();
-			const deleteThumbFromStorage = this.storage.refFromURL.delete();
-			console.log('promise being called');
-			return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
+			const deleteFromDatabase = this.db.ref().update(updateObject).then((d) => {
+				console.log('deleteFromDatabase 1', d)
+			});
+
+			// IF Picture Uris DEFINE/CALL storage delete promises
+			if (pictureStorageUri) {
+				const deleteFullFromStorage = this.storage.refFromURL(pictureStorageUri).delete();
+				const deleteThumbFromStorage = this.storage.refFromURL.delete();
+				console.log('promise being called');
+				return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
+			}
+
+			// RETURNS this promise if no picture uris
+			console.log('deleteFromDatabase called');
+
+			return deleteFromDatabase;
 		}
-
-		// RETURNS this promise if no picture uris
-		console.log('deleteFromDatabase called');
-		
-		return deleteFromDatabase;
-	}
 
 
 

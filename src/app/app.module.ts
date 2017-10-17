@@ -24,6 +24,7 @@ import { UploaderService } from './shared/uploader.service';
 import { AuthService } from './shared/providers/auth.service';
 import { PostComponent } from './post/post.component';
 import { UserPageComponent } from './user-page/user-page.component';
+import { HomeFeedComponent } from './home-feed/home-feed.component'
 
 
 export const firebaseConfig = {
@@ -45,7 +46,8 @@ export const firebaseConfig = {
     LikeComponent,
     AddPictureComponent,
     PostComponent,
-    UserPageComponent 
+    UserPageComponent,
+    HomeFeedComponent
   ],
   imports: [
     AppMaterialModule,
