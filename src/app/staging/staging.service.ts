@@ -20,7 +20,7 @@ export class StagingService {
         let uri;
         componentName === 'home' || 'HomeFeedComponent'
             ? uri = `/feed/${userId}`
-            : componentName === 'general'
+            : componentName === 'general' || 'GeneralComponent'
                 ? uri = '/posts'
                 : uri = '/poeple/${profileUid}/posts';
 
@@ -28,7 +28,6 @@ export class StagingService {
     }
 
     getFeedPostCountOnce(componentName, profileUid?) {
-
         return this.authorization.getAuthorizationState().map((user) => {
             return user.uid;
         }).switchMap((userId) => {
@@ -46,11 +45,16 @@ export class StagingService {
         });
 
     }
-    getHomeFeedPostCount() {
+
+
+
+    // TODO: Am I using this?
+    getHomeFeedPostCount(componentName, profileUid?) {
         return this.authorization.getAuthorizationState().map((user) => {
             return user.uid;
         }).switchMap((userId) => {
-            const query = this.database.list(`feed/${userId}`, (ref) => {
+            const feedUri = this.getFeedUri(componentName, userId);
+            const query = this.database.list(feedUri, (ref) => {
                 return ref.orderByKey();
             });
             return query.valueChanges().map((list) => {
@@ -60,16 +64,16 @@ export class StagingService {
 
     }
 
-    subscribeToHomeFeed() {
+
+    subscribeToHomeFeed(componentName, profileUid?) {
         return this.authorization.getAuthorizationState().map((user) => {
             return user.uid;
         }).switchMap((userId) => {
-            const query = this.database.list(`feed/${userId}`, (ref) => {
+            const feedUri = this.getFeedUri(componentName, userId);
+            const query = this.database.list(feedUri, (ref) => {
                 return ref.orderByKey();
             });
-
             // TODO: do I need value changes here of course with observable you do
-
             return query.valueChanges().map((list) => {
                 return list.length;
             });

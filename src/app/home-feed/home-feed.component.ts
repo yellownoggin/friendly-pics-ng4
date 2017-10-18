@@ -55,7 +55,7 @@ export class HomeFeedComponent implements OnInit {
 			//  console.log(this.originalLength);
 		});
 
-		this.notifyForNewPosts().subscribe((realTimePostLength: number) => {
+		this.notifyForNewPosts('home').subscribe((realTimePostLength: number) => {
 			if (this.originalLength < realTimePostLength) {
 				this.newPostsLength = realTimePostLength - this.originalLength;
                 console.log('results for post length comparison', this.newPostsLength);
@@ -71,8 +71,8 @@ export class HomeFeedComponent implements OnInit {
 	// End of staging
 
 	// // TODO: make it so subscribing is not needed in ng onInit
-	notifyForNewPosts() {
-		return this.staging.subscribeToHomeFeed().map((realTimePostLength) => {
+	notifyForNewPosts(componentName) {
+		return this.staging.subscribeToHomeFeed(componentName).map((realTimePostLength) => {
 			if (realTimePostLength > this.originalLength) {
 				console.log('watchedPostCount is greater than originalLength');
 				return realTimePostLength;
@@ -98,6 +98,8 @@ export class HomeFeedComponent implements OnInit {
 			return this.friendly.getHomeFeedPosts(userId);
 		});
 	}
+
+
 	getHomeFeedPostsWrapper2(): void {
 		this.getHomeFeedPostsWrapper().subscribe((data) => {
 			// console.log('data in the home-feed component', data[1]);
