@@ -35,26 +35,33 @@ export class HomeFeedComponent implements OnInit {
 
 	ngOnInit() {
 
-		this.getHomeFeedPostsWrapper().subscribe((data) => {
+		// this.getHomeFeedPostsWrapper().subscribe((data) => {
+		// 	// console.log('data in the home-feed component', data[1]);
+		// 	this.friendlyPosts = _.reverse(data['posts']);
+		// 	this.nextPage = data['next'];
+		// 	// console.log('this.originalLength', this.originalLength);
+		// });
+
+        this.getHomeFeedPostsWrapper().subscribe((data) => {
 			// console.log('data in the home-feed component', data[1]);
 			this.friendlyPosts = _.reverse(data['posts']);
 			this.nextPage = data['next'];
 			// console.log('this.originalLength', this.originalLength);
 		});
 
-		this.saveOriginalPostCount().subscribe((n) => {
-			console.log('checking post count working', n);
+		this.getOriginalPostCount('home').subscribe((n) => {
+			console.log('saving original post count working', n);
 			this.originalLength = n;
 			//  console.log(this.originalLength);
 		});
 
 		this.notifyForNewPosts().subscribe((realTimePostLength: number) => {
-			console.log('results for post length comparison', realTimePostLength);
-
 			if (this.originalLength < realTimePostLength) {
 				this.newPostsLength = realTimePostLength - this.originalLength;
-			}
-
+                console.log('results for post length comparison', this.newPostsLength);
+			} else {
+                return;
+            }
 		});
 	}
 
@@ -78,17 +85,9 @@ export class HomeFeedComponent implements OnInit {
 	}
 
 	// Get & saves original post count to work with real-time post update
-	saveOriginalPostCount() {
+	getOriginalPostCount(componentName) {
 		// Set a promise for needed observable
-		const myPromise = (userId) => {
-			return this.staging.getHomeFeedPostCountOnce(userId).then((count) => {
-				return count;
-			});
-		};
-
-		return this.getUserId().switchMap((userId) => {
-			return Observable.fromPromise(myPromise(userId));
-		});
+			return this.staging.getFeedPostCountOnce(componentName);
 	}
 
 
