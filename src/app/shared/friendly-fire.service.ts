@@ -16,6 +16,7 @@ import 'rxjs/add/observable/zip';
 
 @Injectable()
 export class FriendlyFireService {
+    currentUserA: firebase.User;
 	user: Observable<firebase.User>;
 	db: firebase.database.Database;
 	tsf: any;
@@ -36,31 +37,21 @@ export class FriendlyFireService {
 		this.db = this.app.database();
 		// this.currentUser = this.afAuth.authState();
 		this.user = this.afAuth.authState;
-		this.user.subscribe(
+		this.auth.getAuthorizationState().subscribe(
 			(value) => {
 				console.log('value', value.uid);
 				this.currentUser = value;
-			},
-			(error) => { console.log('error', error); },
-			() => { console.log('complete it is '); }
-		);
-
-		// console.log('this.currentUser in friendly', this.currentUser.uid);
-		// testing
-
+			});
 	}
 
 	/**
 	Staging
 	*/
 
-	getHomeFeedPosts(userId) {
-
-		// TODO: currentUser undefined ?? but in other methods in this using it is not
-		// console.log('this.currentUser.uid', this.currentUser);
-		// return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
-		return this._getPaginatedFeedWithPostDetails(`/feed/${userId}`, this.POST_PAGE_SIZE, null, true);
-	}
+	// subscribeToHomeFeed() {
+	// 	// Set a watcher on the users feed location
+	// 	return this.database.list(`/feed/${this.currentUser.uid}`).valueChanges();
+	// }
 
 
 
@@ -70,6 +61,19 @@ export class FriendlyFireService {
 	/**
 	 * Retrieving Methods
 	 */
+
+
+	 getHomeFeedPosts(userId) {
+
+		 // TODO: currentUser undefined ?? but in other methods in this using it is not
+		 // console.log('this.currentUser.uid', this.currentUser);
+		 // return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
+
+
+			 console.log('this in get home feed posts', this.currentUserA);
+			 return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
+
+	 }
 
 	getPostData(postId) {
 		return this.database.object(`/posts/${postId}`)
@@ -98,7 +102,6 @@ export class FriendlyFireService {
 			if (earliestEntryId) {
 				return ref.orderByKey().limitToLast(pageSizeOne).endAt(earliestEntryId);
 			}
-
 			return ref.orderByKey().limitToLast(pageSizeOne);
 		});
 
@@ -137,6 +140,7 @@ export class FriendlyFireService {
 				posts: userPosts,
 				next: nextPage
 			};
+
 		}).take(1);
 	}
 
@@ -190,15 +194,11 @@ export class FriendlyFireService {
 			// TODO: not sure why need take here
 			.take(1);
 
-
 	}
 
 	/** End Retrieving Methods  */
 
 
-	// Why no return
-	// Needs types
-	// https://stackoverflow.com/questions/46779043/returned-pomises-not-resolving-when-trying-to-update-delete-multiple-locations
 		deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
 			console.log(`Deleting ${postId}`);
 
@@ -213,9 +213,7 @@ export class FriendlyFireService {
 			// DEFINE/CALL deleteFromDatabase promise
 			console.log('first delete from database 1st');
 
-			const deleteFromDatabase = this.db.ref().update(updateObject).then((d) => {
-				console.log('deleteFromDatabase 1', d)
-			});
+			const deleteFromDatabase = this.db.ref().update(updateObject);
 
 			// IF Picture Uris DEFINE/CALL storage delete promises
 			if (pictureStorageUri) {
@@ -276,7 +274,7 @@ export class FriendlyFireService {
 				update[`/posts/${newPostKey}`] = {
 					full_url: urls[0],
 					thumb_url: urls[1],
-					test: text,
+					text: text,
 					timestamp: firebase.database.ServerValue.TIMESTAMP,
 					full_storage_uri: fullRef.toString(),
 					thumb_storage_uri: thumbRef.toString(),

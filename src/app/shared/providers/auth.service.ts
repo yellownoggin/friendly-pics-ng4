@@ -33,6 +33,10 @@ export class AuthService {
 		return this.afAuth.authState;
 		//   return this.afAuth.idToken;
 	}
+	getAuthorizationState() {
+		return this.afAuth.authState;
+		//   return this.afAuth.idToken;
+	}
 
 	getCurrentUser() {
 		return this.afAuth.auth.currentUser;

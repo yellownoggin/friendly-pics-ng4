@@ -24,7 +24,8 @@ import { UploaderService } from './shared/uploader.service';
 import { AuthService } from './shared/providers/auth.service';
 import { PostComponent } from './post/post.component';
 import { UserPageComponent } from './user-page/user-page.component';
-import { HomeFeedComponent } from './home-feed/home-feed.component'
+import { HomeFeedComponent } from './home-feed/home-feed.component';
+import { StagingService } from './staging/staging.service'
 
 
 export const firebaseConfig = {
@@ -60,7 +61,7 @@ export const firebaseConfig = {
     FormsModule,
     ngfModule
   ],
-  providers: [UploaderService, FriendlyFireService, AuthService],
+  providers: [UploaderService, FriendlyFireService, AuthService, StagingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

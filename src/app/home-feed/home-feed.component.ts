@@ -2,53 +2,117 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FriendlyFireService } from '../shared/friendly-fire.service';
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { AuthService } from "../shared/providers/auth.service";
-import { Observable } from "rxjs/Observable";
+import { AuthService } from '../shared/providers/auth.service';
+import { Observable } from 'rxjs/Observable';
+import { StagingService } from '../staging/staging.service';
 @Component({
 
-  selector: 'fp-app-home-feed',
-  templateUrl: './home-feed.component.html',
-  styleUrls: ['./home-feed.component.css']
+	selector: 'fp-app-home-feed',
+	templateUrl: './home-feed.component.html',
+	styleUrls: ['./home-feed.component.css']
 })
 export class HomeFeedComponent implements OnInit {
+	newPostsLength: number;
+	originalLength: any;
+	nextPage: any;
+	friendlyPosts: any;
 
-  nextPage: any;
-  friendlyPosts: any;
-  /**
-   * part 1
-   * 1. get the posts
-   * 2. bind them
-   * part 2
-   * 4. check
-   * 3. subscribe to home feed (meaning when there is chages)
-   */
+	constructor(
+		private friendly: FriendlyFireService,
+		private sanitizer: DomSanitizer,
+		private auth: AuthService,
+		private staging: StagingService
+	) { }
 
 
-  constructor(private friendly: FriendlyFireService, private sanitizer: DomSanitizer, private auth: AuthService) {}
+	// TODO: use this for the original post new post notification logic
+	// get originalPostCount() {
+	//     return _originalPostsCount
+	// }
+	// set originalPostCount(length) {
+	//      _originalPostsCount = length;
+	// }
 
-  ngOnInit() {
-    this.getHomeFeePostsWrapper().subscribe((data) => {
-        console.log('data in the home-feed component', data[1]);
-            this.friendlyPosts = _.reverse(data['posts']);
-            this.nextPage = data['next'];
-     });
-  }
+	ngOnInit() {
 
- // TODO: the user pattern can this be in the service(in this case)
- // FriendlyFireService 
-  getHomeFeePostsWrapper(): Observable<any> {
-     return this.auth.getAuthState().map((user) => {
-          return user.uid;
-      }).switchMap((userId) => {
-          return this.friendly.getHomeFeedPosts(userId);
-      });
+		this.getHomeFeedPostsWrapper().subscribe((data) => {
+			// console.log('data in the home-feed component', data[1]);
+			this.friendlyPosts = _.reverse(data['posts']);
+			this.nextPage = data['next'];
+			// console.log('this.originalLength', this.originalLength);
+		});
 
-  }
+		this.saveOriginalPostCount().subscribe((n) => {
+			console.log('checking post count working', n);
+			this.originalLength = n;
+			//  console.log(this.originalLength);
+		});
 
-  addNextPage() {
+		this.notifyForNewPosts().subscribe((realTimePostLength: number) => {
+			console.log('results for post length comparison', realTimePostLength);
+
+			if (this.originalLength < realTimePostLength) {
+				this.newPostsLength = realTimePostLength - this.originalLength;
+			}
+
+		});
+	}
+
+
+	// Staging
+
+	// End of staging
+
+	// // TODO: make it so subscribing is not needed in ng onInit
+	notifyForNewPosts() {
+		return this.staging.subscribeToHomeFeed().map((realTimePostLength) => {
+			if (realTimePostLength > this.originalLength) {
+				console.log('watchedPostCount is greater than originalLength');
+				return realTimePostLength;
+			} else {
+				console.log('watchedPostCount is less than or equal to than originalLength');
+				return;
+			}
+		});
+
+	}
+
+	// Get & saves original post count to work with real-time post update
+	saveOriginalPostCount() {
+		// Set a promise for needed observable
+		const myPromise = (userId) => {
+			return this.staging.getHomeFeedPostCountOnce(userId).then((count) => {
+				return count;
+			});
+		};
+
+		return this.getUserId().switchMap((userId) => {
+			return Observable.fromPromise(myPromise(userId));
+		});
+	}
+
+
+	getHomeFeedPostsWrapper(): Observable<any> {
+		return this.auth.getAuthState().map((user) => {
+			return user.uid;
+		}).switchMap((userId) => {
+			return this.friendly.getHomeFeedPosts(userId);
+		});
+	}
+	getHomeFeedPostsWrapper2(): void {
+		this.getHomeFeedPostsWrapper().subscribe((data) => {
+			// console.log('data in the home-feed component', data[1]);
+			this.friendlyPosts = _.reverse(data['posts']);
+			this.nextPage = data['next'];
+            this.newPostsLength = 0;
+			// console.log('this.originalLength', this.originalLength);
+		});
+	}
+
+	addNextPage() {
 		this.nextPage().subscribe((data) => {
 			// concatenate reversed friendlyPosts from next stage method
-			console.log('data["posts"]', data['posts']);
+			// console.log('data["posts"]', data['posts']);
 
 			let nextPagePosts = data['posts'];
 			// making so descending order
@@ -60,6 +124,16 @@ export class HomeFeedComponent implements OnInit {
 
 	getBackgroundImage(image) {
 		return this.sanitizer.bypassSecurityTrustStyle(`url(${image}) no-repeat`);
+	}
+
+	/**
+	 * Helper methods
+	 */
+
+	getUserId() {
+		return this.auth.getAuthState().map((user) => {
+			return user.uid;
+		});
 	}
 
 }

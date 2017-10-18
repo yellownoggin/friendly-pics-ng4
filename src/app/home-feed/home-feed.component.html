@@ -1,12 +1,18 @@
 <p>
   home-feed works!
 </p>
+
+<div id="" class="">
+<a md-raised-button *ngIf="newPostsLength" (click)="getHomeFeedPostsWrapper2()">{{newPostsLength}} New Posts Added</a>
+</div>
 <div id="" *ngFor="let post of friendlyPosts">
   <div class="" style="margin-bottom: 10px">
     <span>Post key: </span>{{post.$key}}
+    <div><span>Post text: </span>{{post.text}}</div>
     <!-- <img src="" alt=""> -->
     <div [ngStyle]="{'background-image': 'url(' + post.author.profile_picture + ')', 'width': '30px', 'height': '30px',  'background-size': 'cover' }"></div>
     <div>{{post.author.full_name}}</div>
+    <div>{{post.text}}</div>
     <div>{{post.timestamp}}</div>
     <div class="mfp-image" [style.background]="getBackgroundImage(post.thumb_url)">hello</div>
     <fp-like [postKey]="post.$key"></fp-like>
