@@ -16,16 +16,38 @@ export class StagingService {
     }
 
 
-    getFeedUri(componentName, userId, profileUid?) {
-        let uri;
-        componentName === 'home' || 'HomeFeedComponent'
-            ? uri = `/feed/${userId}`
-            : componentName === 'general' || 'GeneralComponent'
-                ? uri = '/posts'
-                : uri = '/poeple/${profileUid}/posts';
+    /**
+        1. New Post Feature methods:
+            * parent methods notifyForNewPosts, getOriginalPostCount
+            * child methods* getFeedPostCountOnce, subscribeToHomeFeed
+            * getFeedUri(helper method)
+            * getUserId TODO: Refactor not used at the morment
+     */
 
-        return uri;
-    }
+     // // TODO: make it so subscribing is not needed in ng onInit
+ 	notifyForNewPosts(componentName): Observable<number> {
+ 		return this.subscribeToFeed(componentName).map((realTimePostLength) => {
+            return realTimePostLength;
+ 		});
+
+        // 	if (realTimePostLength > this.originalLength) {
+ 		// 		console.log('watchedPostCount is greater than originalLength');
+ 		// 		return realTimePostLength;
+ 		// 	} else {
+ 		// 		console.log('watchedPostCount is less than or equal to than originalLength');
+ 		// 		return realTimePostLength;
+ 		// 	}
+
+ 	}
+
+ 	// Get & saves original post count to work with real-time post update
+ 	getOriginalPostCount(componentName) {
+ 		// Set a promise for needed observable
+ 			return this.getFeedPostCountOnce(componentName);
+ 	}
+
+
+
 
     getFeedPostCountOnce(componentName, profileUid?) {
         return this.authorization.getAuthorizationState().map((user) => {
@@ -46,26 +68,7 @@ export class StagingService {
 
     }
 
-
-
-    // TODO: Am I using this?
-    getHomeFeedPostCount(componentName, profileUid?) {
-        return this.authorization.getAuthorizationState().map((user) => {
-            return user.uid;
-        }).switchMap((userId) => {
-            const feedUri = this.getFeedUri(componentName, userId);
-            const query = this.database.list(feedUri, (ref) => {
-                return ref.orderByKey();
-            });
-            return query.valueChanges().map((list) => {
-                return list.length;
-            });
-        });
-
-    }
-
-
-    subscribeToHomeFeed(componentName, profileUid?) {
+    subscribeToFeed(componentName, profileUid?) {
         return this.authorization.getAuthorizationState().map((user) => {
             return user.uid;
         }).switchMap((userId) => {
@@ -80,4 +83,28 @@ export class StagingService {
         });
 
     }
+
+
+    // Helper method
+    getFeedUri(componentName, userId, profileUid?) {
+        let uri;
+        componentName === 'home' || 'HomeFeedComponent'
+            ? uri = `/feed/${userId}`
+            : componentName === 'general' || 'GeneralComponent'
+                ? uri = '/posts'
+                : uri = '/poeple/${profileUid}/posts';
+
+        return uri;
+    }
+
+    /**
+     * Helper methods
+     */
+     // make this a service(method in the service)
+    getUserId() {
+        return this.authorization.getAuthState().map((user) => {
+            return user.uid;
+        });
+    }
+
 }

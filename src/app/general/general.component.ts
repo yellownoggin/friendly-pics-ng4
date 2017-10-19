@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FriendlyFireService } from '../shared/friendly-fire.service';
 import { FeedService } from '../shared/feed.service';
 import * as _ from 'lodash';
+import { StagingService } from "../staging/staging.service";
 
 
 
@@ -17,13 +18,15 @@ import * as _ from 'lodash';
 })
 
 export class GeneralComponent implements OnInit {
+    newPostsLength: number;
+    originalCount: any;
 e: any;
 	// TODO: function type?
 	nextPage: any;
 	friendlyPosts: any[];
 
-	constructor(private friendly: FriendlyFireService, private feed: FeedService, private sanitizer: DomSanitizer ) {
-	
+	constructor(private friendly: FriendlyFireService, private feed: FeedService,
+		 private sanitizer: DomSanitizer, private staging: StagingService) {
 	}
 
 
@@ -31,32 +34,58 @@ e: any;
 
 	ngOnInit() {
 		// this.friendly._getPaginatedFeed('/posts', this.friendly.POST_PAGE_SIZE);
-		// TODO: multiple calls in the _getPaginatedFeed needs fixing 
-		// 	- also it doesn't complete 
+		// TODO: multiple calls in the _getPaginatedFeed needs fixing
+		// 	- also it doesn't complete
+
+		// Get posts for component
 		this.friendly.getPosts().subscribe((data) => {
 			console.log('data in the general component', data['posts']);
-			// console.log('data in the general component', data[1]);
-			
 			this.friendlyPosts = _.reverse(data['posts']);
 			this.nextPage = data['next'];
-		},
-		(error) => {
-			console.log('get posts error general component', error);
-		},
-		() => {
-			console.log('getPosts complete');
-				
-		}
-	);
+		});
+
+		// Using the home posts version of 2
+
+
+		this.staging.getOriginalPostCount('general').subscribe((count) => {
+			console.log('original count in general: ',  count);
+				this.originalCount = count;
+			});
+
+		this.staging.notifyForNewPosts('general').subscribe((realTimePostLength) => {
+			if (this.originalCount < realTimePostLength ) {
+				this.newPostsLength = realTimePostLength - this.originalCount;
+				console.log('this.newPostsLength', this.newPostsLength);
+			} else {
+				return;
+			}
+		});
 
 	}
+
+	// Component Logic
+
+	// Used in the new post call because of the added new post length
+	// TODO: need to re-factor with getHomeForThePost?Wrapper(make universal with
+	//  all feeds, think get post, get home feed post how do they do it? )
+	getHomeFeedPostsWrapper2(): void {
+		this.friendly.getPosts().subscribe((data) => {
+			// console.log('data in the home-feed component', data[1]);
+			this.friendlyPosts = _.reverse(data['posts']);
+			this.nextPage = data['next'];
+            this.newPostsLength = 0;
+			// console.log('this.originalLength', this.originalLength);
+		});
+	}
+
+
 
 	// Refactor to service with other components
 	addNextPage() {
 		this.nextPage().subscribe((data) => {
 			// concatenate reversed friendlyPosts from next stage method
 			console.log('data["posts"]', data['posts']);
-			
+
 			let nextPagePosts = data['posts'];
 			// making so descending order
 			nextPagePosts = _.reverse(nextPagePosts);
@@ -70,6 +99,3 @@ e: any;
 	}
 
 }
-
-
-

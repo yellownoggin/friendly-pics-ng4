@@ -49,13 +49,13 @@ export class HomeFeedComponent implements OnInit {
 			// console.log('this.originalLength', this.originalLength);
 		});
 
-		this.getOriginalPostCount('home').subscribe((n) => {
+		this.staging.getOriginalPostCount('home').subscribe((n) => {
 			console.log('saving original post count working', n);
 			this.originalLength = n;
 			//  console.log(this.originalLength);
 		});
 
-		this.notifyForNewPosts('home').subscribe((realTimePostLength: number) => {
+		this.staging.notifyForNewPosts('home').subscribe((realTimePostLength: number) => {
 			if (this.originalLength < realTimePostLength) {
 				this.newPostsLength = realTimePostLength - this.originalLength;
                 console.log('results for post length comparison', this.newPostsLength);
@@ -66,29 +66,16 @@ export class HomeFeedComponent implements OnInit {
 	}
 
 
-	// Staging
+	// Development Staging
 
 	// End of staging
 
-	// // TODO: make it so subscribing is not needed in ng onInit
-	notifyForNewPosts(componentName) {
-		return this.staging.subscribeToHomeFeed(componentName).map((realTimePostLength) => {
-			if (realTimePostLength > this.originalLength) {
-				console.log('watchedPostCount is greater than originalLength');
-				return realTimePostLength;
-			} else {
-				console.log('watchedPostCount is less than or equal to than originalLength');
-				return;
-			}
-		});
 
-	}
 
-	// Get & saves original post count to work with real-time post update
-	getOriginalPostCount(componentName) {
-		// Set a promise for needed observable
-			return this.staging.getFeedPostCountOnce(componentName);
-	}
+	/**
+	 * Component methods
+	 */
+
 
 
 	getHomeFeedPostsWrapper(): Observable<any> {
@@ -99,7 +86,9 @@ export class HomeFeedComponent implements OnInit {
 		});
 	}
 
-
+	// Used in the new post call because of the added new post length
+	// TODO: need to re-factor with getHomeForThePost?Wrapper(make universal with
+	//  all feeds, think get post, get home feed post how do they do it? )
 	getHomeFeedPostsWrapper2(): void {
 		this.getHomeFeedPostsWrapper().subscribe((data) => {
 			// console.log('data in the home-feed component', data[1]);
@@ -127,14 +116,7 @@ export class HomeFeedComponent implements OnInit {
 		return this.sanitizer.bypassSecurityTrustStyle(`url(${image}) no-repeat`);
 	}
 
-	/**
-	 * Helper methods
-	 */
 
-	getUserId() {
-		return this.auth.getAuthState().map((user) => {
-			return user.uid;
-		});
-	}
+
 
 }

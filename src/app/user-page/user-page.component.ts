@@ -5,6 +5,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
+import { StagingService } from "../staging/staging.service";
 
 
 @Component({
@@ -13,13 +14,16 @@ import * as firebase from 'firebase/app';
     styleUrls: ['./user-page.component.css']
 })
 export class UserPageComponent implements OnInit, AfterViewInit {
+    newPostsLength: number;
+    originalLength: any;
     nextPage: any;
     userPosts: any;
     currentUser: firebase.User;
     user: Observable<firebase.User>;
     componentName: string;
 
-    constructor(private afAuth: AngularFireAuth, private friendly: FriendlyFireService) {
+    constructor(private afAuth: AngularFireAuth, private friendly: FriendlyFireService,
+        private staging: StagingService) {
     }
 
     ngOnInit() {
@@ -27,6 +31,19 @@ export class UserPageComponent implements OnInit, AfterViewInit {
         // TODO:
         this.user = this.afAuth.authState;
         this.getUsersFeedPosts();
+
+        this.staging.getFeedPostCountOnce('user').subscribe((count) => {
+            console.log('saving original post count working', count);
+            this.originalLength = count;
+        });
+
+        this.staging.notifyForNewPosts('user').subscribe((newPostsLength) => {
+            if (this.originalLength < newPostsLength) {
+                this.newPostsLength = newPostsLength - this.originalLength;
+            } else {
+                return;
+            }
+        });
     }
 
     ngAfterViewInit() { }
@@ -44,6 +61,7 @@ export class UserPageComponent implements OnInit, AfterViewInit {
                         console.log('next', data['next']);
                         this.userPosts = _.reverse(data['posts']);
                         this.nextPage = data['next'];
+                        this.newPostsLength = 0; 
                     },
                     (error) => { console.log('getUserFeedPosts error', error); },
                     () => { console.log('getUserFeedPosts is completed'); }

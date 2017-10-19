@@ -1,3 +1,6 @@
+<div id="" class="">
+<a md-raised-button *ngIf="newPostsLength" (click)="getHomeFeedPostsWrapper2()">{{newPostsLength}} New Posts Added</a>
+</div>
 <div id="" *ngFor="let post of friendlyPosts">
   <div class="" style="margin-bottom: 10px">
     <span>Post key: </span>{{post.$key}}
