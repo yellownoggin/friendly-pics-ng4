@@ -1,7 +1,7 @@
 <!-- TODO:  no validate will need a validation assuming -->
 <hr>
 <div id="">comments</div>
-<div class="" *ngFor="let comment of comments">
+<div class="" *ngFor="let comment of comments | async">
   <span id="" class="">{{comment.author.full_name}}</span>
         <span id="" class="">{{comment.text}}</span>
 

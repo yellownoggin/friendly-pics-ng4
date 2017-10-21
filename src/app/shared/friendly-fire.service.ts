@@ -48,14 +48,11 @@ export class FriendlyFireService {
 	Staging
 	*/
 
-	// subscribeToHomeFeed() {
-	// 	// Set a watcher on the users feed location
-	// 	return this.database.list(`/feed/${this.currentUser.uid}`).valueChanges();
-	// }
 
 
-
-	// End Of Staging
+	/**
+	 * End of Staging
+	 */
 
 
 	/**
@@ -194,11 +191,13 @@ export class FriendlyFireService {
 			// TODO: not sure why need take here
 			.take(1);
 
+
 	}
 
 	/** End Retrieving Methods  */
 
 
+	// ISSUE: not returning confirmation after update (think the promise all is the issue)
 		deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
 			console.log(`Deleting ${postId}`);
 

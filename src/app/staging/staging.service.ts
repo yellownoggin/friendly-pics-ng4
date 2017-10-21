@@ -16,6 +16,28 @@ export class StagingService {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
         1. New Post Feature methods:
             * parent methods notifyForNewPosts, getOriginalPostCount
@@ -29,15 +51,6 @@ export class StagingService {
  		return this.subscribeToFeed(componentName).map((realTimePostLength) => {
             return realTimePostLength;
  		});
-
-        // 	if (realTimePostLength > this.originalLength) {
- 		// 		console.log('watchedPostCount is greater than originalLength');
- 		// 		return realTimePostLength;
- 		// 	} else {
- 		// 		console.log('watchedPostCount is less than or equal to than originalLength');
- 		// 		return realTimePostLength;
- 		// 	}
-
  	}
 
  	// Get & saves original post count to work with real-time post update
@@ -85,7 +98,17 @@ export class StagingService {
     }
 
 
-    // Helper method
+    /**
+     * Helper methods
+     */
+     // make this a service(method in the service)
+     // todo: not used on all of methods that it could
+    getUserId() {
+        return this.authorization.getAuthState().map((user) => {
+            return user.uid;
+        });
+    }
+
     getFeedUri(componentName, userId, profileUid?) {
         let uri;
         componentName === 'home' || 'HomeFeedComponent'
@@ -97,14 +120,5 @@ export class StagingService {
         return uri;
     }
 
-    /**
-     * Helper methods
-     */
-     // make this a service(method in the service)
-    getUserId() {
-        return this.authorization.getAuthState().map((user) => {
-            return user.uid;
-        });
-    }
 
 }

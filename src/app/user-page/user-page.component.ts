@@ -61,7 +61,7 @@ export class UserPageComponent implements OnInit, AfterViewInit {
                         console.log('next', data['next']);
                         this.userPosts = _.reverse(data['posts']);
                         this.nextPage = data['next'];
-                        this.newPostsLength = 0; 
+                        this.newPostsLength = 0;
                     },
                     (error) => { console.log('getUserFeedPosts error', error); },
                     () => { console.log('getUserFeedPosts is completed'); }
@@ -84,24 +84,5 @@ export class UserPageComponent implements OnInit, AfterViewInit {
         });
     }
 
-
-    // this is the friendlyfire defined method called in component
-    // does more than just get posts for use feed
-    // can put this in the getUserFeedPosts maybe
-    loadUserFeedPage() {
-        /**
-        the ui or component logic
-
-        1. IF check the length and show or no show  value for element
-        2. firebae.subscribetouserfeed - userId, callback*, ?
-            * b. call back
-            *   prepends, creates imagecard
-            *   hides no post element
-            * c. ?
-        3. this.addPosts(data.entries) ---- Angular this is done in the template
-        4. this.toggleNextPageButton setUp infinitescroll or next page (half done in template*)
-
-         */
-    }
 
 }
