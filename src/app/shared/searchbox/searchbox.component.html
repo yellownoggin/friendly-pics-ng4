@@ -1,0 +1,12 @@
+<p>
+  searchbox works!
+</p>
+
+<div class="">
+    <input type="text" name="searchText" (keyupl)="searchTerm$.next($event.target.value)">
+    <!-- <input type="text" name="searchText" [(ngModel)]="searchText"> -->
+</div>
+
+<div class="">
+    {{searchText}}
+</div>
