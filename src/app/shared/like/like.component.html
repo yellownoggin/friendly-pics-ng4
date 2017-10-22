@@ -1,4 +1,10 @@
 <span class="">
+        <button #likeButton name="button">
+         <span *ngIf="likeStatus">Liked</span>
+         <span *ngIf="!likeStatus">Like</span>
+        </button>
+</span>
+<!-- <span class="">
     <div *ngIf="likeStatus" class="">
         <button (click)="updateLike(false)" name="button">Liked</button>
     </div>
@@ -6,8 +12,9 @@
         <button (click)="updateLike(true)" name="button">Like</button>
     </div>
 
-</span>
+</span> -->
 
 <span class="likesCount">
+<!-- likesCount:    {{ likesCount.length | async }} -->
 likesCount:    {{ likesCount }}
 </span>
