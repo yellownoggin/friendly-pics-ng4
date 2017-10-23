@@ -26,6 +26,7 @@ import { PostComponent } from './post/post.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { HomeFeedComponent } from './home-feed/home-feed.component';
 import { StagingService } from './staging/staging.service';
+import { SearchboxComponent } from './shared/searchbox/searchbox.component';
 
 
 export const firebaseConfig = {
@@ -48,7 +49,8 @@ export const firebaseConfig = {
     AddPictureComponent,
     PostComponent,
     UserPageComponent,
-    HomeFeedComponent
+    HomeFeedComponent,
+    SearchboxComponent
   ],
   imports: [
     AppMaterialModule,

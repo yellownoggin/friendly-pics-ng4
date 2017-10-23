@@ -1,0 +1,23 @@
+.fp-searchcontainer {
+  max-width: 140px;
+  margin-left: 20px;
+}
+
+.fp-searchcontainer #fp-searchResults {
+  width: calc(100% + 90px);
+}
+
+.fp-searchcontainer {
+  margin-top: 4px;
+  position: relative;
+}
+
+#fp-searchResults {
+  display: none;
+  position: absolute;
+  padding: 5px;
+  min-height: 0;
+  opacity: 0.8;
+  width: 100%;
+  overflow: hidden;
+}

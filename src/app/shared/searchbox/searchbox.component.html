@@ -2,11 +2,15 @@
   searchbox works!
 </p>
 
-<div class="">
-    <input type="text" name="searchText" (keyupl)="searchTerm$.next($event.target.value)">
-    <!-- <input type="text" name="searchText" [(ngModel)]="searchText"> -->
-</div>
-
-<div class="">
-    {{searchText}}
+<div class="fp-searchContainer">
+  <div id="" class="">
+    <input type="text" name="searchText" (keyup)="searchTerm$.next($event.target.value)">
+  </div>
+  <div id="" class="fp-searchResults">
+    <div *ngFor="let result of searchResults" id="" class="">
+        <div id="" class="">
+            {{result.value.full_name}}
+        </div>
+    </div>
+  </div>
 </div>
