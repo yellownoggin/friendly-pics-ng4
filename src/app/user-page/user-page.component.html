@@ -7,9 +7,6 @@
   <!-- user posts {{userPosts | json}}   -->
 </p>
 
-<div id="" class="">
-  <a md-raised-button *ngIf="newPostsLength" (click)="getUsersFeedPosts()">{{newPostsLength}} New Posts Added</a>
-</div>
 <div id="" *ngFor="let post of userPosts">
 
   <a [routerLink]="['/post', post.$key]">

@@ -79,9 +79,9 @@ export class FriendlyFireService {
 
 
 
-	getUserFeedPosts(uid) {
+	getUserFeedPosts(pageUid) {
 		console.log('getUserFeedPosts called');
-		return this._getPaginatedFeedWithPostDetails(`/people/${uid}/posts`, this.POST_PAGE_SIZE, null, true);
+		return this._getPaginatedFeedWithPostDetails(`/people/${pageUid}/posts`, this.POST_PAGE_SIZE, null, true);
 	}
 
 
