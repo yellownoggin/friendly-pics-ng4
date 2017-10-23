@@ -65,9 +65,9 @@ export class StagingService {
 		const reversedQuery$ = reversedQuery.snapshotChanges();
 
 		return Observable
-            // first needed in order to make forkJoin work
+			// first needed in order to make forkJoin work
 			.forkJoin(straightQuery$.first(), reversedQuery$.first())
-            .map((list) => {
+			.map((list) => {
 				console.log('list', list);
 				const people = {};
 				// Combines list into one with nested for each loops
@@ -93,7 +93,13 @@ export class StagingService {
 				});
 				console.log(people, 'people');
 
-				return people;
+				// Issue2 don't show results if there is nothing being searched
+				if (searchString === '') {
+					return {};
+				} else {
+					return people;
+				}
+
 
 			});
 	}
