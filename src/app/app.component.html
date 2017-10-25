@@ -21,13 +21,13 @@
         <div fxFlex="10" style="text-align: center;">
           <a [routerLink]="['/user', currentUserUid]">My Profile</a></div>
         <div fxFlex="10" style="text-align: center;">
-          <a md-raised-button (click)="logIn()">LogIn</a>
+          <a mat-raised-button (click)="logIn()">LogIn</a>
         </div>
         <div fxFlex="10" style="text-align: center;">
-          <a md-raised-button (click)="logOut()">LogOut</a>
+          <a mat-raised-button (click)="logOut()">LogOut</a>
         </div>
         <div fxFlex="10" style="text-align: center;">
-          <a md-raised-button (click)="getCurrentUserUid()">Check Current User</a>
+          <a mat-raised-button (click)="getCurrentUserUid()">Check Current User</a>
         </div>
 
       </div>
@@ -35,11 +35,11 @@
       <div class="row2ofheader">
         <div fxLayout="row" fxLayoutAlign="center center" style="height: 64px">
           <div fxFlex="25" style="text-align: center;">
-            <a md-raised-button (click)="triggerInputFile()">Add Pic</a>
+            <a mat-raised-button (click)="triggerInputFile()">Add Pic</a>
           </div>
           <div fxFlex="25" style="text-align: center;">
             <input #picInput type="file" (change)="readPicture($event)">
-            <!-- <a md-raised-button ngfSelect>Check Current User</a> -->
+            <!-- <a mat-raised-button ngfSelect>Check Current User</a> -->
           </div>
 
           <div fxFlex="25" style="text-align: center;">

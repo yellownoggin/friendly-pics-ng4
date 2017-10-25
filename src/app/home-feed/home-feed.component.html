@@ -3,7 +3,7 @@
 </p>
 
 <div id="" class="">
-<a md-raised-button *ngIf="newPostsLength" (click)="getHomeFeedPostsWrapper2()">{{newPostsLength}} New Posts Added</a>
+<a mat-raised-button *ngIf="newPostsLength" (click)="getHomeFeedPostsWrapper2()">{{newPostsLength}} New Posts Added</a>
 </div>
 <div id="" *ngFor="let post of friendlyPosts">
   <div class="" style="margin-bottom: 10px">
@@ -23,7 +23,7 @@
 
 <hr>
 <div id="" class="">
-  <a md-raised-button (click)="addNextPage()">
+  <a mat-raised-button (click)="addNextPage()">
     next page
     </a>
 </div>

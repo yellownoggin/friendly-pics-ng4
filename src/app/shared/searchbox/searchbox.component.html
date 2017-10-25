@@ -2,16 +2,42 @@
   searchbox works!
 </p>
 
-<div class="fp-searchContainer">
-  <div id="" class="">
-    <input type="text" name="searchText" (keyup)="searchTerm$.next($event.target.value)">
-  </div>
-  <div id="" class="fp-searchResults">
-    <div *ngFor="let result of searchResults" id="" class="">
-        <div id="" class="">
-            <a [routerLink]="['user', result.key]">{{result.value.full_name}}</a>
+<!-- SearchBoxComponent RXJS Subject pattern
+without component library
+Using: subject pattern in the key up attribute
+1. needs work, using component library(material angular)
+because more of the finished product. A lot of minor behaviors
+-->
 
-        </div>
-    </div>
-  </div>
+<div class="fp-searchContainer">
+<div id="" class="">
+<input #search type="text" name="searchText" (keyup)="searchTerm$.next($event.target.value)">
 </div>
+<div id="" class="">
+  <button type="button" name="button" (click)="test()">clear input</button>
+</div>
+<div id="" class="" value="testing the value property">
+
+
+</div>
+<div id="" class="fp-searchResults">
+<div *ngFor="let result of searchResults" id="" class="">
+    <div id="" class="">
+        <a [routerLink]="['user', result.key]">{{result.value.full_name}}</a>
+
+    </div>
+</div>
+</div>
+</div>
+
+
+<!-- <mat-form-field>
+   <input matInput [formControl]="myControl">
+   {{myControl.value}}
+</mat-form-field>
+
+<mat-autocomplete>
+   <mat-option *ngFor="let result of searchResults" >
+      {{ result }}
+   </mat-option>
+</mat-autocomplete> -->

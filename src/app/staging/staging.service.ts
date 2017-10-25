@@ -93,7 +93,8 @@ export class StagingService {
 				});
 				console.log(people, 'people');
 
-				// Issue2 don't show results if there is nothing being searched
+				// marcusd
+				// TODO: Review this location of the fix and logix
 				if (searchString === '') {
 					return {};
 				} else {

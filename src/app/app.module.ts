@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppMaterialModule } from './app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ngfModule, FileUploader, ngf } from 'angular-file';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -61,6 +61,7 @@ export const firebaseConfig = {
     AngularFireAuthModule,
     FlexLayoutModule,
     FormsModule,
+    ReactiveFormsModule,
     ngfModule
   ],
   providers: [UploaderService, FriendlyFireService, AuthService, StagingService],
