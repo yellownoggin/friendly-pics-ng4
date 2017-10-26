@@ -13,13 +13,12 @@ import { Router } from "@angular/router";
 	styleUrls: ['./searchbox.component.css']
 })
 export class SearchboxComponent implements OnInit, OnChanges {
-	searchResults: any ;
-// Observable<object[]>
+	// TODO: Observable<object[]> ??not working
+	searchResults: any;
 	searchText: any;
-	// searchTerm$: any;
-	searchTerm$: Subject<string> = new Subject();
 	// Not needed/originally used for RXJS Subject pattern
 	searchControl: FormControl = new FormControl();
+
 	@ViewChild('search') searchInput: any;
 
 	constructor(private staging: StagingService, private renderer: Renderer2, private router: Router) {

@@ -23,6 +23,14 @@ export class StagingService {
 		this.normalDatabase = this.app.database();
 	}
 
+	/**
+		1. search box 
+			logic & query & algorithm
+			needs to be separated into component  &  friendly component
+		2. Add new posts
+			- logic/code
+	 */
+
 
     /**
      * Search service staging
