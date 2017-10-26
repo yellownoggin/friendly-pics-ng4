@@ -15,7 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 	styleUrls: ['./user-page.component.css']
 })
 export class UserPageComponent implements OnInit, AfterViewInit {
-	newPostsLength: number;
+    userFeed$: Observable<any>;
+    addPostsLength: number;
 	originalLength: any;
 	nextPage: any;
 	userPosts: any;
@@ -29,33 +30,34 @@ export class UserPageComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this.componentName = 'user page component';
-		// TODO:see re-factor re-factoring
-
-		this.route.params.switchMap((param) => {
-			const profileId = param.id;
-            console.log('profileId', profileId);
-			return this.friendly.getUserFeedPosts(profileId);
-		}).subscribe(
-			(data) => {
-				console.log('posts', data['posts']);
-				console.log('next', data['next']);
-				this.userPosts = _.reverse(data['posts']);
-				this.nextPage = data['next'];
-				this.newPostsLength = 0;
-			},
-			(error) => { console.log('getUserFeedPosts error', error); },
-			() => { console.log('getUserFeedPosts is completed'); }
-			);
-
-
-
+		this.userFeed$ = this.getUserFeedPostsComponent();
+		 this.userFeed$.subscribe((feed) => {
+		 	console.log('feed', feed);
+			this.userPosts = feed.posts;
+			this.addNextPage = feed.next;
+			this.addPostsLength = feed.addPostsLength;
+		});
 
 	}
 
 	ngAfterViewInit() { }
 
 
+	getUserFeedPostsComponent() {
+		return this.route.params.switchMap((param) => {
+			const profileId = param.id;
+			// console.log('profileId', profileId);
+			return this.friendly.getUserFeedPosts(profileId);
+		}).map(
+			(data) => {
+				// console.log('posts', data['posts']);
+				// console.log('next', data['next']);
 
+				data['posts'] = _.reverse(data['posts']);
+				data['addPostsLength'] = 0;
+				return data;
+			});
+	}
 
 
 
