@@ -8,6 +8,11 @@
 </p>
 
 
+<div id="" class="">
+<a mat-raised-button *ngIf="newPostsLength" (click)="getUserFeedPostsComponentWithBindings()">{{newPostsLength}} New Posts Added</a>
+</div>
+
+
 <div id="" *ngFor="let post of userPosts">
 
   <a [routerLink]="['/post', post.$key]">
@@ -21,4 +26,10 @@
       <fp-like [postKey]="post.$key"></fp-like>
     </div>
   </a>
+</div>
+
+<div id="" class="">
+  <a mat-raised-button (click)="addNextPage()">
+      next page
+      </a>
 </div>

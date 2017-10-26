@@ -24,7 +24,7 @@ export class StagingService {
 	}
 
 	/**
-		1. search box 
+		1. search box
 			logic & query & algorithm
 			needs to be separated into component  &  friendly component
 		2. Add new posts
@@ -73,12 +73,12 @@ export class StagingService {
 					});
 
 				});
-				console.log('people', people);
+				// console.log('people', people);
 				// Represents userids combined with both reverse name && straight query
 				const userIds = Object.keys(people);
 				// Iterate & Filter out names that do not start with searchString
 				userIds.forEach((userId) => {
-					console.log('userId', userId);
+					// console.log('userId', userId);
 					const name = people[userId]['_search_index']['full_name'];
 					const reversedName = people[userId]._search_index.reversed_full_name;
 					if (!name.startsWith(searchString) && !reversedName.startsWith(searchString)) {
@@ -86,7 +86,7 @@ export class StagingService {
 					}
 
 				});
-				console.log(people, 'people');
+				// console.log(people, 'people');
 
 				const peopleArray = this.generateArray(people);
 				// marcusd
@@ -124,7 +124,7 @@ export class StagingService {
      */
 
 	// // TODO: make it so subscribing is not needed in ng onInit
-	notifyForNewPosts(componentName): Observable<number> {
+	notifyForNewPosts(componentName, profileId?): Observable<number> {
 		return this.subscribeToFeed(componentName).map((realTimePostLength) => {
 			return realTimePostLength;
 		});
@@ -143,7 +143,7 @@ export class StagingService {
 		return this.authorization.getAuthorizationState().map((user) => {
 			return user.uid;
 		}).switchMap((userId) => {
-			const feedUri = this.getFeedUri(componentName, userId);
+			const feedUri = this.getFeedUri(componentName, userId, profileUid);
 			const feedCountPromise = this.normalDatabase.ref(feedUri)
 				.once('value').then((snapshot) => {
 					const data = snapshot.val();
@@ -185,7 +185,12 @@ export class StagingService {
 		});
 	}
 
-	getFeedUri(componentName, userId, profileUid?) {
+
+	/**
+	 *  Relative component uri uses current userId or profile page userId when
+	  	user feed posts
+	 */
+	getFeedUri(componentName, userId, profileUid?): string {
 		let uri;
 		componentName === 'home' || 'HomeFeedComponent'
 			? uri = `/feed/${userId}`
