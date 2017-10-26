@@ -27,44 +27,47 @@ import { UserPageComponent } from './user-page/user-page.component';
 import { HomeFeedComponent } from './home-feed/home-feed.component';
 import { StagingService } from './staging/staging.service';
 import { SearchboxComponent } from './shared/searchbox/searchbox.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 export const firebaseConfig = {
-    apiKey: 'AIzaSyD9ItMOV_b4PlU0P68uerXoUDG_oqi74cg',
-    authDomain: 'friendlypix-angular1.firebaseapp.com',
-    databaseURL: 'https://friendlypix-angular1.firebaseio.com',
-    projectId: 'friendlypix-angular1',
-    storageBucket: 'friendlypix-angular1.appspot.com',
-    messagingSenderId: '428223190133'
+	apiKey: 'AIzaSyD9ItMOV_b4PlU0P68uerXoUDG_oqi74cg',
+	authDomain: 'friendlypix-angular1.firebaseapp.com',
+	databaseURL: 'https://friendlypix-angular1.firebaseio.com',
+	projectId: 'friendlypix-angular1',
+	storageBucket: 'friendlypix-angular1.appspot.com',
+	messagingSenderId: '428223190133'
 };
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ShellComponent,
-    GeneralComponent,
-    SplashComponent,
-    CommentsComponent,
-    LikeComponent,
-    AddPictureComponent,
-    PostComponent,
-    UserPageComponent,
-    HomeFeedComponent,
-    SearchboxComponent
-  ],
-  imports: [
-    AppMaterialModule,
-    BrowserModule,
-    AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
-    FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ngfModule
-  ],
-  providers: [UploaderService, FriendlyFireService, AuthService, StagingService],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		ShellComponent,
+		GeneralComponent,
+		SplashComponent,
+		CommentsComponent,
+		LikeComponent,
+		AddPictureComponent,
+		PostComponent,
+		UserPageComponent,
+		HomeFeedComponent,
+		SearchboxComponent
+	],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		AngularFireModule.initializeApp(firebaseConfig),
+		AngularFireDatabaseModule,
+		AngularFireAuthModule,
+		FlexLayoutModule,
+        BrowserAnimationsModule,
+        AppMaterialModule,
+		FormsModule,
+		ReactiveFormsModule
+	],
+	providers: [UploaderService, FriendlyFireService, AuthService, StagingService
+
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

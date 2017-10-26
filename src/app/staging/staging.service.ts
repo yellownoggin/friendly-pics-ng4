@@ -10,6 +10,7 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/zip';
+import 'rxjs/add/observable/from';
 import * as latinize from "latinize";
 @Injectable()
 export class StagingService {
@@ -29,22 +30,9 @@ export class StagingService {
      * Uses subject
      */
 
-	search(terms: Observable<string>) {
-		console.log('triggered');
-
-		return terms.debounceTime(400)
-			// TODO: distinctUntilChanged
-			// not working as explained (shouldn't repeat)
-			// works with or without it
-			.distinctUntilChanged()
-			.switchMap((term) => {
-				// console.log(term);
-				const searchString = term.toLowerCase().trim();
-				console.log(searchString);
-				// minimum characters ?
-				// return term;
-				return this.searchUsers(searchString, 10);
-			});
+	search(terms) {
+		const searchString = terms.toLowerCase().trim();
+		return this.searchUsers(searchString, 10);
 	}
 
 
@@ -68,7 +56,6 @@ export class StagingService {
 			// first needed in order to make forkJoin work
 			.forkJoin(straightQuery$.first(), reversedQuery$.first())
 			.map((list) => {
-				console.log('list', list);
 				const people = {};
 				// Combines list into one with nested for each loops
 				// TODO: Could have used flatMap(quick drive did not work)
@@ -93,36 +80,26 @@ export class StagingService {
 				});
 				console.log(people, 'people');
 
+				const peopleArray = this.generateArray(people);
 				// marcusd
 				// TODO: Review this location of the fix and logix
 				if (searchString === '') {
-					return {};
+					return [];
 				} else {
-					return people;
+					return peopleArray;
 				}
 
 
 			});
+
+
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	generateArray(obj) {
+		return Object.keys(obj).map((key) => {
+			return { key: key, value: obj[key] };
+		});
+	}
 
 
 
@@ -159,7 +136,6 @@ export class StagingService {
 			return user.uid;
 		}).switchMap((userId) => {
 			const feedUri = this.getFeedUri(componentName, userId);
-			console.log('uri', feedUri);
 			const feedCountPromise = this.normalDatabase.ref(feedUri)
 				.once('value').then((snapshot) => {
 					const data = snapshot.val();

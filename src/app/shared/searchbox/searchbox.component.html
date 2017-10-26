@@ -1,43 +1,23 @@
+
+
 <p>
   searchbox works!
 </p>
 
-<!-- SearchBoxComponent RXJS Subject pattern
-without component library
-Using: subject pattern in the key up attribute
-1. needs work, using component library(material angular)
-because more of the finished product. A lot of minor behaviors
--->
 
-<div class="fp-searchContainer">
-<div id="" class="">
-<input #search type="text" name="searchText" (keyup)="searchTerm$.next($event.target.value)">
-</div>
-<div id="" class="">
-  <button type="button" name="button" (click)="test()">clear input</button>
-</div>
-<div id="" class="" value="testing the value property">
-
-
-</div>
-<div id="" class="fp-searchResults">
-<div *ngFor="let result of searchResults" id="" class="">
-    <div id="" class="">
-        <a [routerLink]="['user', result.key]">{{result.value.full_name}}</a>
-
-    </div>
-</div>
-</div>
-</div>
-
-
-<!-- <mat-form-field>
-   <input matInput [formControl]="myControl">
-   {{myControl.value}}
+<mat-form-field>
+   <input matInput [formControl]="searchControl" [matAutocomplete]="auto">
 </mat-form-field>
+<!-- <div class="">
+{{searchResults | json}}
+</div> -->
+<mat-autocomplete #auto="matAutocomplete">
 
-<mat-autocomplete>
-   <mat-option *ngFor="let result of searchResults" >
-      {{ result }}
+
+   <mat-option *ngFor="let result of searchResults" (onSelectionChange)="routeToUserSelected(result.key)" [value]="result.value.full_name">
+       <a [routerLink]="['user', result.key]">
+      {{ result.value.full_name }}
+      </a>
    </mat-option>
-</mat-autocomplete> -->
+
+</mat-autocomplete>

@@ -2,6 +2,10 @@ import { StagingService } from '../../staging/staging.service';
 import { Subject } from 'rxjs/Subject';
 import { FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, OnChanges, Renderer2, ViewChild } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/startWith';
+import { Router } from "@angular/router";
+
 
 @Component({
 	selector: 'fp-app-searchbox',
@@ -9,48 +13,44 @@ import { Component, OnInit, OnChanges, Renderer2, ViewChild } from '@angular/cor
 	styleUrls: ['./searchbox.component.css']
 })
 export class SearchboxComponent implements OnInit, OnChanges {
-	searchResults: {
-	};
+	searchResults: any ;
+// Observable<object[]>
 	searchText: any;
 	// searchTerm$: any;
 	searchTerm$: Subject<string> = new Subject();
 	// Not needed/originally used for RXJS Subject pattern
-    myControl: FormControl =  new FormControl();
-    @ViewChild ('search') searchInput: any;
+	searchControl: FormControl = new FormControl();
+	@ViewChild('search') searchInput: any;
 
-	constructor(private staging: StagingService, private renderer: Renderer2 ) {
+	constructor(private staging: StagingService, private renderer: Renderer2, private router: Router) {
 	}
 
 	ngOnInit() {
 
-        // console.log('search', search);
-		this.staging.search(this.searchTerm$).subscribe((n) => {
-
-			// TODO: see for in nested object question issue
-			// formally there was a for in statement here
-			// TODO: should generateArray be in the subscribed area or in the other part of the algorithm
-			this.searchResults = this.generateArray(n);
-
-		});
+		this.searchControl.valueChanges
+			// 'Observes' observable in groups
+			.debounceTime(400)
+			// Alligator.Io operator suggestion
+			.distinctUntilChanged()
+			// Needed so no error his throne on first stream
+			.startWith('')
+			.switchMap((r) => {
+				return this.staging.search(r);
+			}).subscribe((r) => {
+				this.searchResults = r;
+			});
 
 	}
 
 	ngOnChanges() {
 
 	}
-    test() {
 
-        const search = this.searchInput.nativeElement;
-        console.log('search', search);
-        // this.renderer.addClass(search, 'myNewClass');
-        this.renderer.setAttribute(search, 'value', 'myNewClass');
+	routeToUserSelected(key) {
+		this.router.navigate(['user', key]);
+	}
 
-    }
-    consoleHello() {
-        console.log('hello');
-    }
-
-	// TODO: itersate of objects in angulario quick fix
+	// TODO: cannot iterate of objects in angulario quick fix
 	generateArray(obj) {
 		return Object.keys(obj).map((key) => {
 			return { key: key, value: obj[key] };
