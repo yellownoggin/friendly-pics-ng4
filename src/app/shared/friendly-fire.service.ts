@@ -211,7 +211,7 @@ export class FriendlyFireService {
 
 			// DEFINE/CALL deleteFromDatabase promise
 			console.log('first delete from database 1st');
-
+            console.log(updateObject, 'updateObject');
 			const deleteFromDatabase = this.db.ref().update(updateObject);
 
 			// IF Picture Uris DEFINE/CALL storage delete promises
