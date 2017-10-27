@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { FriendlyFireService } from './shared/friendly-fire.service';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
+import { StagingService } from "./staging/staging.service";
 
 @Component({
 	selector: 'fp-root',
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 	splashShow: any;
 
 	constructor(private _auth: AuthService, private renderer: Renderer2,
-		private upload: UploaderService, private router: Router, private friendly: FriendlyFireService) {
+		private upload: UploaderService, private router: Router, private friendly: FriendlyFireService, private staging: StagingService) {
 		this.readPicture = (e) => upload.readPicture(e);
 
 		this.getCurrentUser = () => {
@@ -50,6 +51,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 		);
 
 
+
+
+
 	}
 
 	ngAfterViewInit(): void {
@@ -58,8 +62,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	/** /Staging **/
 
-	deleteTsf() {
-		this.friendly.deleteTsf();
+	deleteUsersComments() {
+		this.staging.deleteUserComments('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
+			.subscribe((n) => {
+				console.log('next in delete comments', n);
+			});
 	}
 
 
