@@ -223,8 +223,6 @@ export class FriendlyFireService {
 			}
 
 			// RETURNS this promise if no picture uris
-			console.log('deleteFromDatabase called');
-
 			return deleteFromDatabase;
 		}
 

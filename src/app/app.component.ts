@@ -62,7 +62,14 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	/** /Staging **/
 
-	deleteUsersComments() {
+	deleteUserLikes() {
+		this.staging.deleteUserLikes('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
+		.subscribe((n) => {
+			console.log('n', n);
+		});
+	}
+
+	deleteUserComments() {
 		this.staging.deleteUserComments('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
 			.subscribe((n) => {
 				console.log('next in delete comments', n);
