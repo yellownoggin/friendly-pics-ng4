@@ -61,6 +61,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 	}
 
 	/** /Staging **/
+	deleteUserFeed(): void {
+		this.staging.deleteUserFeed('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
+		.then((n) => {
+			console.log('n', n);
+		});
+	}
 
 	deleteUserLikes() {
 		this.staging.deleteUserLikes('iNRpsaQBd9ZfVnxs1Or448I16Xm2')

@@ -40,13 +40,26 @@ export class StagingService {
      */
 
 
+     /**
+         1. Parent key is userId, so
+         2. Everything in reference is deleted
+         3. Use remove() versus iterating & multi-reference delete pattern(null)
+      */
+	deleteUserFeed(userIdToDelete): Promise<void> {
+		const feedReference = this.database.list(`/feed/${userIdToDelete}`);
+		return feedReference.remove();
+	}
+
+
 	/** set up comments delete */
 
 
     /**
      * data structure looks like: *
      likes->post key->userId-> timestamp
+
      */
+
 
 	deleteUserLikes(userUidToDelete) {
 		// Get list of posts that are liked
@@ -82,15 +95,11 @@ export class StagingService {
 					});
 
 				});
-
+				Observable.fromPromise(this.database.object('/').update(updateObject));
 				return Observable.fromPromise(this.database.object('/').update(updateObject));
 			});
 
-
 	}
-
-
-
 	deleteUserComments(userUidToDelete): Observable<void> {
 
 		const commentsRef = this.database.list(`/comments/`, (ref) => {
