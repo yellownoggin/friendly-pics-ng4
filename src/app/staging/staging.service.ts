@@ -17,6 +17,7 @@ import * as firebase from 'firebase';
 
 @Injectable()
 export class StagingService {
+    fbStorage: firebase.storage.Storage;
     storage: firebase.storage.Storage;
     // may need to import firebase
     // normalDatabase: firebase.database.Database;
@@ -26,7 +27,10 @@ export class StagingService {
         // need access to regular realtime database firebase api
         this.normalDatabase = this.app.database();
         this.storage = this.app.storage();
+        this.fbStorage = firebase.storage();
     }
+
+
 
 	/**
         0. deleteUserComments
@@ -40,7 +44,15 @@ export class StagingService {
 
     /**
      * delete user
+     * ds: people/uid
      */
+
+    /** deleteUserinPeople **/
+    deleteUserPeople(deletedUid): Promise<void> {
+        return this.database.object(`/people/${deletedUid}`).remove();
+    }
+
+
 
     /**
      * Delete user posts
