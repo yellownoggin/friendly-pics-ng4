@@ -60,19 +60,41 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 	}
 
+
+
 	/** /Staging **/
+
+
+	deleteFollowingOfDeletedUser() {
+		this.staging
+			.deleteFollowingOfDeletedUser('NTYKPSpfnxTdu6P8GAtJB7LJPkI3')
+			.subscribe((n) => {
+				console.log('n', n);
+			});
+	}
+
+
+	deleteUserFollowers() {
+		this.staging.deleteFollowers('NTYKPSpfnxTdu6P8GAtJB7LJPkI3')
+			.then((response) => {
+				console.log('response', response);
+			});
+	}
+
+
+
 	deleteUserFeed(): void {
 		this.staging.deleteUserFeed('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
-		.then((n) => {
-			console.log('n', n);
-		});
+			.then((n) => {
+				console.log('n', n);
+			});
 	}
 
 	deleteUserLikes() {
 		this.staging.deleteUserLikes('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
-		.subscribe((n) => {
-			console.log('n', n);
-		});
+			.subscribe((n) => {
+				console.log('n', n);
+			});
 	}
 
 	deleteUserComments() {

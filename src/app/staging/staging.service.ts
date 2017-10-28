@@ -40,14 +40,60 @@ export class StagingService {
      */
 
 
-     /**
-         1. Parent key is userId, so
-         2. Everything in reference is deleted
-         3. Use remove() versus iterating & multi-reference delete pattern(null)
-      */
+	/**
+	   deleteUserFeed
+		1. Parent key is userId, so
+		2. Everything in reference is deleted
+		3. Use remove() versus iterating & multi-reference delete pattern(null)
+	 */
 	deleteUserFeed(userIdToDelete): Promise<void> {
 		const feedReference = this.database.list(`/feed/${userIdToDelete}`);
 		return feedReference.remove();
+	}
+
+	/**
+	   deleteFollowers
+		1. Parent key is userId, so
+		2. Everything in reference is deleted
+		3. Use remove() versus iterating & multi-reference delete pattern(null)
+		4. Used the rule used for feed - where the key(uid) had ".write": "auth.uid === $followedUid",
+	 */
+	deleteFollowers(userIdToDelete): Promise<void> {
+		const followersReference = this.database.list(`/followers/${userIdToDelete}`);
+		return followersReference.remove();
+	}
+
+    /**
+        data structure: people/userId/following/followedUserId/lastPostId
+         TODO: rename to removeUserFromFollowing
+         removes deleted user from followers following (in people location)
+     */
+
+	deleteFollowingOfDeletedUser(deletedUser) {
+		const peopleReference$ = this.database.list('/people')
+			.snapshotChanges();
+
+
+		return peopleReference$.switchMap((peopleSnapshotList) => {
+			// Prepare for multi- reference update
+			const updateObject = {};
+
+			peopleSnapshotList.forEach((personSnapshot) => {
+				// Prevent deleted user being involved
+				if (personSnapshot.key !== deletedUser) {
+					const follower = personSnapshot.key;
+					// console.log('personSnapshot.payload.val()', personSnapshot.payload.val());
+					const followingObject = personSnapshot.payload.val().following;
+					const followingIds = Object.keys(followingObject);
+					if (followingIds.includes(deletedUser)) {
+						updateObject[`people/${follower}/following/${deletedUser}`] = null;
+					}
+				}
+			});
+
+			return Observable.fromPromise(this.database.object('/').update(updateObject));
+
+		});
 	}
 
 
