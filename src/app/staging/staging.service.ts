@@ -13,9 +13,11 @@ import 'rxjs/add/observable/zip';
 import 'rxjs/add/observable/from';
 import * as latinize from "latinize";
 import * as _ from "lodash";
+import * as firebase from 'firebase';
 
 @Injectable()
 export class StagingService {
+    storage: firebase.storage.Storage;
     // may need to import firebase
     // normalDatabase: firebase.database.Database;
     normalDatabase: any;
@@ -23,6 +25,7 @@ export class StagingService {
     constructor(private database: AngularFireDatabase, private authorization: AuthService, private app: FirebaseApp) {
         // need access to regular realtime database firebase api
         this.normalDatabase = this.app.database();
+        this.storage = this.app.storage();
     }
 
 	/**
@@ -39,38 +42,36 @@ export class StagingService {
      * delete user
      */
 
-
     /**
      * Delete user posts
      * @return {Promise<void>}
      */
 
-     deleteUserPostsAll(deletedUid) {
-         const postsRef$ = this.database.list('/posts/').snapshotChanges();
+    deleteUserPostsAll(deletedUid): Observable<any> {
+        const postsRef$ = this.database.list('/posts/').snapshotChanges();
         return postsRef$.switchMap((r) => {
-            //  array of posts snapshots
-             const postsSnapshotsArray = r;
+            //  Array of posts snapshots
+            const postsSnapshotsArray = r;
 
-             const updateObject = {};
+            const updateObject = {};
 
-             postsSnapshotsArray.forEach((postSnapshot) => {
-                 // Save key for later if post is by user
-                 const postKey = postSnapshot.key;
-                 const postDataObject = postSnapshot.payload.val();
+            postsSnapshotsArray.forEach((postSnapshot) => {
+                // Save key for later if post is by user
+                const postKey = postSnapshot.key;
+                const postDataObject = postSnapshot.payload.val();
 
-                 // data structure
-                 // posts/author/uid
+                // data structure
+                // posts/author/uid
 
-                 if (postDataObject.author.uid === deletedUid) {
-                     console.log(postDataObject.author.uid);
-                     updateObject[`posts/${postKey}`] = null;
-                 }
+                if (postDataObject.author.uid === deletedUid) {
+                    console.log(postDataObject.author.uid);
+                    updateObject[`posts/${postKey}`] = null;
+                }
 
-             });
-            //  console.log('updateObject', updateObject);
-            return Observable.from([1, 2, 3]);
-         });
-     }
+            });
+            return Observable.fromPromise(this.database.object('/').update(updateObject));
+        });
+    }
 
 	/**
 	   deleteUserFeed
