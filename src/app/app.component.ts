@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { FriendlyFireService } from './shared/friendly-fire.service';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
-import { StagingService } from "./staging/staging.service";
+
 
 @Component({
     selector: 'fp-root',
@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     splashShow: any;
 
     constructor(private _auth: AuthService, private renderer: Renderer2,
-        private upload: UploaderService, private router: Router, private friendly: FriendlyFireService, private staging: StagingService) {
+        private upload: UploaderService, private router: Router, private friendly: FriendlyFireService) {
         this.readPicture = (e) => upload.readPicture(e);
 
         this.getCurrentUser = () => {
@@ -62,74 +62,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 
 
-    /** /Staging **/
-
-
-
-    deleteUserPeople() {
-        this.staging.deleteUserPeople('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
-            .then((response) => {
-                console.log('Person Deleted');
-            })
-            .catch((e) => {
-                console.log('Error in deleteUserPeople: ', e);
-            });
-    }
-
-    deleteUserPostsAll() {
-        this.staging.deleteUserPostsAll('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
-            .subscribe((n) => {
-                console.log('n', n);
-            });
-    }
-
-    deleteFollowingOfDeletedUser() {
-        this.staging
-            .deleteFollowingOfDeletedUser('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
-            .subscribe((n) => {
-                console.log('n', n);
-            });
-    }
-
-
-    deleteUserFollowers() {
-        this.staging.deleteFollowers('NTYKPSpfnxTdu6P8GAtJB7LJPkI3')
-            .then((response) => {
-                console.log('response', response);
-            });
-    }
-
-
-
-    deleteUserFeed(): void {
-        this.staging.deleteUserFeed('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
-            .then((n) => {
-                console.log('n', n);
-            });
-    }
-
-    deleteUserLikes() {
-        this.staging.deleteUserLikes('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
-            .subscribe((n) => {
-                console.log('n', n);
-            });
-    }
-
-    deleteUserComments() {
-        this.staging.deleteUserComments('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
-            .subscribe((n) => {
-                console.log('next in delete comments', n);
-            });
-    }
-
+    /** /stagingy **/
 
     triggerInputFile() {
         // TODO: Renderer2. Working on all platforms?
         // See https://trello.com/c/BRAhMopv/44-issues
         this.picInput.nativeElement.click();
     }
-
-
 
 
     logOut() {
@@ -173,6 +112,68 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }
             });
     }
+
+
+	/**
+	 * DELETE USER wrappers
+	 * TODO: Re-factor to 1 method
+	 */
+
+	 deleteUserPeople() {
+		 this.friendly.deleteUserPeople('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
+			 .then((response) => {
+				 console.log('Person Deleted');
+			 })
+			 .catch((e) => {
+				 console.log('Error in deleteUserPeople: ', e);
+			 });
+	 }
+
+	 deleteUserPostsAll() {
+		 this.friendly.deleteUserPostsAll('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
+			 .subscribe((n) => {
+				 console.log('n', n);
+			 });
+	 }
+
+	 deleteFollowingOfDeletedUser() {
+		 this.friendly
+			 .deleteFollowingOfDeletedUser('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
+			 .subscribe((n) => {
+				 console.log('n', n);
+			 });
+	 }
+
+
+	 deleteUserFollowers() {
+		 this.friendly.deleteFollowers('NTYKPSpfnxTdu6P8GAtJB7LJPkI3')
+			 .then((response) => {
+				 console.log('response', response);
+			 });
+	 }
+
+
+
+	 deleteUserFeed(): void {
+		 this.friendly.deleteUserFeed('6m1TUlYQFDUVMq4UtGxBYA1TwF32')
+			 .then((n) => {
+				 console.log('n', n);
+			 });
+	 }
+
+	 deleteUserLikes() {
+		 this.friendly.deleteUserLikes('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
+			 .subscribe((n) => {
+				 console.log('n', n);
+			 });
+	 }
+
+	 deleteUserComments() {
+		 this.friendly.deleteUserComments('iNRpsaQBd9ZfVnxs1Or448I16Xm2')
+			 .subscribe((n) => {
+				 console.log('next in delete comments', n);
+			 });
+	 }
 
 
 }

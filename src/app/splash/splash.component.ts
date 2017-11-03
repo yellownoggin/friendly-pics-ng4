@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../shared/providers/auth.service';
 import { StagingService } from "../staging/staging.service";
+import { GoogleUserData } from '../model/more';
+
 
 
 
@@ -55,10 +57,10 @@ export class SplashComponent implements OnInit, OnChanges {
 
 	signInWithGoogle(): void {
 		this.auth.signInWithGoogle()
-			.then((user: any) => this.postSignIn(user));
+			.then((user: GoogleUserData) => this.postSignIn(user));
 	}
 
-	postSignIn(user: any): Promise<void> {
+	postSignIn(user: GoogleUserData): Promise<void> {
 		this.router.navigate(['/home']);
 
 		// Pattern correct taking care of save user data promise here returning clean simple arrow in parent method

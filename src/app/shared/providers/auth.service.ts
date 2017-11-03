@@ -20,9 +20,6 @@ export enum AuthProviders {
 export class AuthService {
 	user: any;
 	authState$: Observable<firebase.User>;
-
-
-
 	authClass: any;
 
 	constructor(private afAuth: AngularFireAuth) {
