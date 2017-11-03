@@ -3,6 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../shared/providers/auth.service';
+import { StagingService } from "../staging/staging.service";
+
 
 
 @Component({
@@ -12,19 +14,26 @@ import { AuthService } from '../shared/providers/auth.service';
 })
 
 export class SplashComponent implements OnInit, OnChanges {
+
 	@Input() splashIt: any;
 
 	user: any;
 	signIn: any;
 	a: any;
 	x: any;
+	_auth: any;
 
-	constructor(private _auth: AuthService, private router: Router) {
+	constructor(private auth: AuthService, private router: Router, private staging: StagingService) {
 		//    this.user = this._auth.getCurrentUser();
 		//    this.user = 'fred';
 	}
 
 	ngOnInit() {
+		// firechat pattern
+
+
+		// old code
+		this._auth = this.auth;
 		this.user = this._auth.getCurrentUser();
 		this.x = this._auth;
 		this.x = 'this._auth';
@@ -34,8 +43,53 @@ export class SplashComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges() {
+		// Bool used on ng if div in template
+		// (determined by the app component)
 		this.user = this.splashIt;
 	}
+
+	/**
+	 * FireChat pattern
+	 */
+
+
+	signInWithGoogle(): void {
+		this.auth.signInWithGoogle()
+			.then((user: any) => this.postSignIn(user));
+	}
+
+	postSignIn(user: any): Promise<void> {
+		this.router.navigate(['/home']);
+
+		// Pattern correct taking care of save user data promise here returning clean simple arrow in parent method
+		return this.staging
+			.saveUserData(user.photoURL, user.displayName, user.uid)
+			.then(() => {
+				console.log('Saving user data succeeded ');
+			})
+			.catch((error: any) => console.error('Error in saving user data'));
+	}
+
+
+
+
+
+
+	/**
+	 * Old Code
+	 */
+
+	// signInWithGoogle() {
+	// 	this._auth.useGoogleProvider().then((result) => {
+	// 		console.log('this._auth', this._auth);
+	// 		console.log('results use google provider', result);
+	//
+	// 		// TODO: Friendly pix uses the app wide user id
+	// 		// instead of the uid from the auth data information
+	// 		// thought that the their way may ensure that the app see's the auth.?
+	// 		 return this.staging.saveUserData(result.user.photoURL, result.user.displayName, result.user.uid);
+	// 	});
+	// }
 
 	logIn() {
 		this._auth.logIn()
