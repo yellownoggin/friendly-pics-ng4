@@ -61,7 +61,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
 
-
     /** /stagingy **/
 
     triggerInputFile() {
@@ -98,7 +97,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
 
     }
-
 
     watchAuthState() {
         this._auth.authClass.auth
