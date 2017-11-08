@@ -5,9 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../shared/providers/auth.service';
 import { StagingService } from "../staging/staging.service";
 import { GoogleUserData } from '../model/more';
-
-
-
+import { AuthServiceFireChat } from "../auth/auth.service";
 
 @Component({
 	selector: 'fp-splash',
@@ -25,7 +23,9 @@ export class SplashComponent implements OnInit, OnChanges {
 	x: any;
 	_auth: any;
 
-	constructor(private auth: AuthService, private router: Router, private staging: StagingService) {
+
+	constructor(private auth: AuthService, private router: Router,
+		private staging: StagingService, private authFireChat: AuthServiceFireChat) {
 		//    this.user = this._auth.getCurrentUser();
 		//    this.user = 'fred';
 	}
@@ -42,6 +42,8 @@ export class SplashComponent implements OnInit, OnChanges {
 		//   if (this.user === null) {
 		//       this.user = 'There is no user.';
 		//   }
+		//
+
 	}
 
 	ngOnChanges() {
@@ -54,9 +56,8 @@ export class SplashComponent implements OnInit, OnChanges {
 	 * FireChat pattern
 	 */
 
-
 	signInWithGoogle(): void {
-		this.auth.signInWithGoogle()
+		this.authFireChat.signInWithGoogle()
 			.then((user: GoogleUserData) => this.postSignIn(user));
 	}
 
