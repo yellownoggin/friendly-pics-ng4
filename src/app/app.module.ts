@@ -28,6 +28,7 @@ import { HomeFeedComponent } from './home-feed/home-feed.component';
 import { StagingService } from './staging/staging.service';
 import { SearchboxComponent } from './shared/searchbox/searchbox.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AuthModule } from './auth/auth.module';
 
 
 export const firebaseConfig = {
@@ -63,10 +64,10 @@ export const firebaseConfig = {
         BrowserAnimationsModule,
         AppMaterialModule,
 		FormsModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		AuthModule
 	],
 	providers: [UploaderService, FriendlyFireService, AuthService, StagingService
-
 	],
 	bootstrap: [AppComponent]
 })
