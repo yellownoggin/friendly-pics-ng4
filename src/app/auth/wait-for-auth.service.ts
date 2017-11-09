@@ -21,10 +21,12 @@ export class WaitForAuthService {
 
 				if (authorizationState) {
                     // IF authorized return true(as is)
-					return authorizationState;
+					const authorized = authorizationState;
+					return authorized;
 				} else {
                     // IF not authorized still return true
-					return !authorizationState;
+                    const unauthorized = authorizationState;
+					return !unauthorized;
 				}
 
 
