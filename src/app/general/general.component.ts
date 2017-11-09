@@ -7,9 +7,6 @@ import * as _ from 'lodash';
 import { StagingService } from "../staging/staging.service";
 
 
-
-
-
 @Component({
 	templateUrl: './general.component.html',
 	// TODO: need a shared css
@@ -17,16 +14,17 @@ import { StagingService } from "../staging/staging.service";
 	providers: [FriendlyFireService, FeedService]
 })
 
+
 export class GeneralComponent implements OnInit {
-    newPostsLength: number;
-    originalCount: any;
-e: any;
+	newPostsLength: number;
+	originalCount: any;
+	e: any;
 	// TODO: function type?
 	nextPage: any;
 	friendlyPosts: any[];
 
 	constructor(private friendly: FriendlyFireService, private feed: FeedService,
-		 private sanitizer: DomSanitizer, private staging: StagingService) {
+		private sanitizer: DomSanitizer, private staging: StagingService) {
 	}
 
 
@@ -48,12 +46,12 @@ e: any;
 
 
 		this.staging.getOriginalPostCount('general').subscribe((count) => {
-			console.log('original count in general: ',  count);
-				this.originalCount = count;
-			});
+			console.log('original count in general: ', count);
+			this.originalCount = count;
+		});
 
 		this.staging.notifyForNewPosts('general').subscribe((realTimePostLength) => {
-			if (this.originalCount < realTimePostLength ) {
+			if (this.originalCount < realTimePostLength) {
 				this.newPostsLength = realTimePostLength - this.originalCount;
 				console.log('this.newPostsLength', this.newPostsLength);
 			} else {
@@ -73,7 +71,7 @@ e: any;
 			// console.log('data in the home-feed component', data[1]);
 			this.friendlyPosts = _.reverse(data['posts']);
 			this.nextPage = data['next'];
-            this.newPostsLength = 0;
+			this.newPostsLength = 0;
 			// console.log('this.originalLength', this.originalLength);
 		});
 	}

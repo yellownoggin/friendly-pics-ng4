@@ -17,7 +17,7 @@ import 'rxjs/add/observable/zip';
 
 @Injectable()
 export class FriendlyFireService {
-    currentUserA: firebase.User;
+	currentUserA: firebase.User;
 	user: Observable<firebase.User>;
 	db: firebase.database.Database;
 	tsf: any;
@@ -67,17 +67,17 @@ export class FriendlyFireService {
 	 */
 
 
-	 getHomeFeedPosts(userId) {
+	getHomeFeedPosts(userId) {
 
-		 // TODO: currentUser undefined ?? but in other methods in this using it is not
-		 // console.log('this.currentUser.uid', this.currentUser);
-		 // return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
+		// TODO: currentUser undefined ?? but in other methods in this using it is not
+		// console.log('this.currentUser.uid', this.currentUser);
+		// return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
 
 
-			 console.log('this in get home feed posts', this.currentUserA);
-			 return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
+		console.log('this in get home feed posts', this.currentUserA);
+		return this._getPaginatedFeedWithPostDetails(`/feed/${this.currentUser.uid}`, this.POST_PAGE_SIZE, null, true);
 
-	 }
+	}
 
 	getPostData(postId) {
 		return this.database.object(`/posts/${postId}`)
@@ -205,33 +205,33 @@ export class FriendlyFireService {
 
 
 	// ISSUE: not returning confirmation after update (think the promise all is the issue)
-		deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
-			console.log(`Deleting ${postId}`);
+	deletePost(postId, pictureStorageUri, thumbStorageUri): Promise<any> {
+		console.log(`Deleting ${postId}`);
 
-			// CONSTRUCT/DEFINE update object for real-time database data deletion
-			const updateObject = {};
-			updateObject[`/posts/${postId}`] = null;
-			updateObject[`/people/${this.currentUser.uid}/posts/${postId}`] = null;
-			updateObject[`/feed/${this.currentUser.uid}/${postId}`] = null;
-			updateObject[`/comments/${postId}`] = null;
-			updateObject[`/likes/${postId}`] = null;
+		// CONSTRUCT/DEFINE update object for real-time database data deletion
+		const updateObject = {};
+		updateObject[`/posts/${postId}`] = null;
+		updateObject[`/people/${this.currentUser.uid}/posts/${postId}`] = null;
+		updateObject[`/feed/${this.currentUser.uid}/${postId}`] = null;
+		updateObject[`/comments/${postId}`] = null;
+		updateObject[`/likes/${postId}`] = null;
 
-			// DEFINE/CALL deleteFromDatabase promise
-			console.log('first delete from database 1st');
-            console.log(updateObject, 'updateObject');
-			const deleteFromDatabase = this.db.ref().update(updateObject);
+		// DEFINE/CALL deleteFromDatabase promise
+		console.log('first delete from database 1st');
+		console.log(updateObject, 'updateObject');
+		const deleteFromDatabase = this.db.ref().update(updateObject);
 
-			// IF Picture Uris DEFINE/CALL storage delete promises
-			if (pictureStorageUri) {
-				const deleteFullFromStorage = this.storage.refFromURL(pictureStorageUri).delete();
-				const deleteThumbFromStorage = this.storage.refFromURL.delete();
-				console.log('promise being called');
-				return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
-			}
-
-			// RETURNS this promise if no picture uris
-			return deleteFromDatabase;
+		// IF Picture Uris DEFINE/CALL storage delete promises
+		if (pictureStorageUri) {
+			const deleteFullFromStorage = this.storage.refFromURL(pictureStorageUri).delete();
+			const deleteThumbFromStorage = this.storage.refFromURL.delete();
+			console.log('promise being called');
+			return Promise.all([deleteFromDatabase, deleteFullFromStorage, deleteThumbFromStorage]);
 		}
+
+		// RETURNS this promise if no picture uris
+		return deleteFromDatabase;
+	}
 
 
 
@@ -378,10 +378,10 @@ export class FriendlyFireService {
      * TODO: Re-factor to 1 method
      */
 
-    /** deleteUserinPeople ds: people/uid **/
-    deleteUserPeople(deletedUid): Promise<void> {
-        return this.database.object(`/people/${deletedUid}`).remove();
-    }
+	/** deleteUserinPeople ds: people/uid **/
+	deleteUserPeople(deletedUid): Promise<void> {
+		return this.database.object(`/people/${deletedUid}`).remove();
+	}
 
 
 
@@ -390,31 +390,31 @@ export class FriendlyFireService {
      * @return {Promise<void>}
      */
 
-    deleteUserPostsAll(deletedUid): Observable<any> {
-        const postsRef$ = this.database.list('/posts/').snapshotChanges();
-        return postsRef$.switchMap((r) => {
-            //  Array of posts snapshots
-            const postsSnapshotsArray = r;
+	deleteUserPostsAll(deletedUid): Observable<any> {
+		const postsRef$ = this.database.list('/posts/').snapshotChanges();
+		return postsRef$.switchMap((r) => {
+			//  Array of posts snapshots
+			const postsSnapshotsArray = r;
 
-            const updateObject = {};
+			const updateObject = {};
 
-            postsSnapshotsArray.forEach((postSnapshot) => {
-                // Save key for later if post is by user
-                const postKey = postSnapshot.key;
-                const postDataObject = postSnapshot.payload.val();
+			postsSnapshotsArray.forEach((postSnapshot) => {
+				// Save key for later if post is by user
+				const postKey = postSnapshot.key;
+				const postDataObject = postSnapshot.payload.val();
 
-                // data structure
-                // posts/author/uid
+				// data structure
+				// posts/author/uid
 
-                if (postDataObject.author.uid === deletedUid) {
-                    console.log(postDataObject.author.uid);
-                    updateObject[`posts/${postKey}`] = null;
-                }
+				if (postDataObject.author.uid === deletedUid) {
+					console.log(postDataObject.author.uid);
+					updateObject[`posts/${postKey}`] = null;
+				}
 
-            });
-            return Observable.fromPromise(this.database.object('/').update(updateObject));
-        });
-    }
+			});
+			return Observable.fromPromise(this.database.object('/').update(updateObject));
+		});
+	}
 
     /**
        deleteUserFeed
@@ -422,10 +422,10 @@ export class FriendlyFireService {
         2. Everything in reference is deleted
         3. Use remove() versus iterating & multi-reference delete pattern(null)
      */
-    deleteUserFeed(userIdToDelete): Promise<void> {
-        const feedReference = this.database.list(`/feed/${userIdToDelete}`);
-        return feedReference.remove();
-    }
+	deleteUserFeed(userIdToDelete): Promise<void> {
+		const feedReference = this.database.list(`/feed/${userIdToDelete}`);
+		return feedReference.remove();
+	}
 
     /**
        deleteFollowers
@@ -434,10 +434,10 @@ export class FriendlyFireService {
         3. Use remove() versus iterating & multi-reference delete pattern(null)
         4. Used the rule used for feed - where the key(uid) had ".write": "auth.uid === $followedUid",
      */
-    deleteFollowers(userIdToDelete): Promise<void> {
-        const followersReference = this.database.list(`/followers/${userIdToDelete}`);
-        return followersReference.remove();
-    }
+	deleteFollowers(userIdToDelete): Promise<void> {
+		const followersReference = this.database.list(`/followers/${userIdToDelete}`);
+		return followersReference.remove();
+	}
 
     /**
         data structure: people/userId/following/followedUserId/lastPostId
@@ -448,35 +448,35 @@ export class FriendlyFireService {
 
      */
 
-    deleteFollowingOfDeletedUser(deletedUser) {
-        const peopleReference$ = this.database.list('/people')
-            .snapshotChanges();
+	deleteFollowingOfDeletedUser(deletedUser) {
+		const peopleReference$ = this.database.list('/people')
+			.snapshotChanges();
 
 
-        return peopleReference$.switchMap((peopleSnapshotList) => {
-            // Prepare for multi- reference update
-            const updateObject = {};
+		return peopleReference$.switchMap((peopleSnapshotList) => {
+			// Prepare for multi- reference update
+			const updateObject = {};
 
-            peopleSnapshotList.forEach((personSnapshot) => {
-                // Prevent deleted user being involved
-                if (personSnapshot.key !== deletedUser) {
-                    const follower = personSnapshot.key;
-                    // console.log('personSnapshot.payload.val()', personSnapshot.payload.val());
-                    const followingObject = personSnapshot.payload.val().following;
-                    const followingIds = Object.keys(followingObject);
-                    if (followingIds.includes(deletedUser)) {
-                        updateObject[`people/${follower}/following/${deletedUser}`] = null;
-                    }
-                }
-            });
+			peopleSnapshotList.forEach((personSnapshot) => {
+				// Prevent deleted user being involved
+				if (personSnapshot.key !== deletedUser) {
+					const follower = personSnapshot.key;
+					// console.log('personSnapshot.payload.val()', personSnapshot.payload.val());
+					const followingObject = personSnapshot.payload.val().following;
+					const followingIds = Object.keys(followingObject);
+					if (followingIds.includes(deletedUser)) {
+						updateObject[`people/${follower}/following/${deletedUser}`] = null;
+					}
+				}
+			});
 
-            return Observable.fromPromise(this.database.object('/').update(updateObject));
+			return Observable.fromPromise(this.database.object('/').update(updateObject));
 
-        });
-    }
+		});
+	}
 
 
-    /** set up comments delete */
+	/** set up comments delete */
 
 
     /**
@@ -486,89 +486,89 @@ export class FriendlyFireService {
      */
 
 
-    deleteUserLikes(userUidToDelete) {
-        // Get list of posts that are liked
-        // Iterate through the children of the posts find posts where user
-        //    - find posts that have deleted user's userId
-        // add to ` likes/${postId}/${deletedUserid}` = null
+	deleteUserLikes(userUidToDelete) {
+		// Get list of posts that are liked
+		// Iterate through the children of the posts find posts where user
+		//    - find posts that have deleted user's userId
+		// add to ` likes/${postId}/${deletedUserid}` = null
 
-        const updateObject = {};
-
-
-        // TODO: development note: not using cramp order by key don't think it matters here
-        const likesRef = this.database.list('/likes');
-
-        // likePosts easier said than likedPosts(voice code)
-        return likesRef.snapshotChanges()
-            .take(1)
-            .switchMap((likePosts) => {
-                // TODO: what is a light post snapshot? include
-                // it's an array of snapshots s you can't use key here
-                console.log('likedPostsSnapshot', likePosts);
-                // console.log('likedPosts', likePosts.key);
-                likePosts.forEach((post) => {
-                    const postId = post.key;
-
-                    // object of current users who liked post
-                    const userIdsObject = post.payload.val();
-                    // userids now in a an array
-                    const userIds = Object.keys(userIdsObject);
-                    userIds.forEach((id) => {
-                        if (id === userUidToDelete) {
-                            updateObject[`likes/${postId}/${id}`] = null;
-                        }
-                    });
-
-                });
-                Observable.fromPromise(this.database.object('/').update(updateObject));
-                return Observable.fromPromise(this.database.object('/').update(updateObject));
-            });
-
-    }
-    deleteUserComments(userUidToDelete): Observable<void> {
-
-        const commentsRef = this.database.list(`/comments/`, (ref) => {
-            return ref.orderByKey();
-        });
-
-        // snapshotChanges versus valueChanges: need post key(keys) in order to complete reference delete
-        return commentsRef.snapshotChanges()
-            // stream once on the deletion action
-            .take(1)
-            .switchMap((list) => {
-                // set up for multiple reference deletion
-                const updateObject = {};
-                const commentsList = list;
-                // Really not needed just consistent with getting lists descending
-                const commentsListReversed = _.reverse(commentsList);
-
-                // need: `comments/postKey/commentKey`
-                // Iteration 1: store post key
-                commentsListReversed.forEach((commentSnapshot) => {
-                    const postKey = commentSnapshot.key;
-
-                    const commentsObject = commentSnapshot.payload.val();
-                    // Iterate through an object:  pattern
-                    const commentsKeys = Object.keys(commentsObject);
-                    // Iteration 2: author uid this child of comment key
-                    // IF author uid  === deleted userId then add reference to update object
-                    commentsKeys.forEach((commentKey) => {
-                        const commentUid = commentsObject[commentKey].author.uid;
-                        // console.log('uid', commentsObject[key].author.uid);
-                        if (commentUid === userUidToDelete) {
-                            updateObject[`comments/${postKey}/${commentKey}`] = null;
-                        }
-
-                    });
-
-                });
-                // Bulk or multi- reference update/deletion
-                return Observable.fromPromise(this.database.object('/').update(updateObject));
-
-            });
+		const updateObject = {};
 
 
-    }
+		// TODO: development note: not using cramp order by key don't think it matters here
+		const likesRef = this.database.list('/likes');
+
+		// likePosts easier said than likedPosts(voice code)
+		return likesRef.snapshotChanges()
+			.take(1)
+			.switchMap((likePosts) => {
+				// TODO: what is a light post snapshot? include
+				// it's an array of snapshots s you can't use key here
+				console.log('likedPostsSnapshot', likePosts);
+				// console.log('likedPosts', likePosts.key);
+				likePosts.forEach((post) => {
+					const postId = post.key;
+
+					// object of current users who liked post
+					const userIdsObject = post.payload.val();
+					// userids now in a an array
+					const userIds = Object.keys(userIdsObject);
+					userIds.forEach((id) => {
+						if (id === userUidToDelete) {
+							updateObject[`likes/${postId}/${id}`] = null;
+						}
+					});
+
+				});
+				Observable.fromPromise(this.database.object('/').update(updateObject));
+				return Observable.fromPromise(this.database.object('/').update(updateObject));
+			});
+
+	}
+	deleteUserComments(userUidToDelete): Observable<void> {
+
+		const commentsRef = this.database.list(`/comments/`, (ref) => {
+			return ref.orderByKey();
+		});
+
+		// snapshotChanges versus valueChanges: need post key(keys) in order to complete reference delete
+		return commentsRef.snapshotChanges()
+			// stream once on the deletion action
+			.take(1)
+			.switchMap((list) => {
+				// set up for multiple reference deletion
+				const updateObject = {};
+				const commentsList = list;
+				// Really not needed just consistent with getting lists descending
+				const commentsListReversed = _.reverse(commentsList);
+
+				// need: `comments/postKey/commentKey`
+				// Iteration 1: store post key
+				commentsListReversed.forEach((commentSnapshot) => {
+					const postKey = commentSnapshot.key;
+
+					const commentsObject = commentSnapshot.payload.val();
+					// Iterate through an object:  pattern
+					const commentsKeys = Object.keys(commentsObject);
+					// Iteration 2: author uid this child of comment key
+					// IF author uid  === deleted userId then add reference to update object
+					commentsKeys.forEach((commentKey) => {
+						const commentUid = commentsObject[commentKey].author.uid;
+						// console.log('uid', commentsObject[key].author.uid);
+						if (commentUid === userUidToDelete) {
+							updateObject[`comments/${postKey}/${commentKey}`] = null;
+						}
+
+					});
+
+				});
+				// Bulk or multi- reference update/deletion
+				return Observable.fromPromise(this.database.object('/').update(updateObject));
+
+			});
+
+
+	}
 
 
 

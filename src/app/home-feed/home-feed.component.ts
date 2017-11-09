@@ -5,12 +5,16 @@ import * as _ from 'lodash';
 import { AuthService } from '../shared/providers/auth.service';
 import { Observable } from 'rxjs/Observable';
 import { StagingService } from '../staging/staging.service';
+
+
 @Component({
 
 	selector: 'fp-app-home-feed',
 	templateUrl: './home-feed.component.html',
 	styleUrls: ['./home-feed.component.css']
 })
+
+
 export class HomeFeedComponent implements OnInit {
 	newPostsLength: number;
 	originalLength: any;
@@ -69,7 +73,6 @@ export class HomeFeedComponent implements OnInit {
 	// Development Staging
 
 	// End of staging
-
 
 
 	/**
