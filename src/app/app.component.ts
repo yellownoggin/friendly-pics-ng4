@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit, Renderer2 } from '@angular/core';
 // import { ngfModule, FileUploader, ngf } from 'angular-file';
+import { Router } from '@angular/router';
+import { FriendlyFireService } from './shared/friendly-fire.service';
+import { Observable } from 'rxjs/Observable';
+import * as firebase from 'firebase';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/map';
 
 // My components
 import { AuthService } from './shared/providers/auth.service';
@@ -7,10 +13,7 @@ import { UploaderService } from './shared/uploader.service';
 
 // Interfaces
 import { FileReaderEvent } from './model/more';
-import { Router } from '@angular/router';
-import { FriendlyFireService } from './shared/friendly-fire.service';
-import { Observable } from 'rxjs/Observable';
-import * as firebase from 'firebase';
+
 
 
 @Component({
@@ -106,10 +109,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 	watchAuthState() {
 		this._auth.authClass.auth
 			.onAuthStateChanged((user) => {
-                // Reload the browser help with new userState propagation
-                // Re instantiates the component data
-                window.location.reload();
-
+				// Reload the browser help with new userState propagation
+				// Re instantiates the component data
+				// window.location.reload();
+				console.log('on off state changed called');
 				if (user === null) {
 					this.splashShow = true;
 					console.log('There is no user at the moment: ', user);
@@ -119,6 +122,25 @@ export class AppComponent implements OnInit, AfterViewInit {
 				}
 
 			});
+			// why won't below work as an observer
+			// TODO: t is not a function onAuthStateChanged
+			// come back to this
+			// take out map can't take or does not make sense
+			// .take(1)
+			// .map((user) => {
+			// 	// Reload the browser help with new userState propagation
+			// 	// Re instantiates the component data
+			// 	// window.location.reload();
+			// 	console.log('on off state changed called');
+			// 	if (user === null) {
+			// 		this.splashShow = true;
+			// 		console.log('There is no user at the moment: ', user);
+			// 	} else {
+			// 		this.splashShow = false;
+			// 		console.log('Current userId', user);
+			// 	}
+			//
+			// });
 	}
 
 
