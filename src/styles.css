@@ -1,4 +1,6 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import './app/shared/css/shared-feed.css';
+@import './app/shared/css/main.css';
 
 
 /**
