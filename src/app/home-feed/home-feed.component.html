@@ -1,29 +1,59 @@
-<p>
-  home-feed works!
-</p>
-
-<div id="" class="">
+<!-- <div id="" class="">
 <a mat-raised-button *ngIf="newPostsLength" (click)="getHomeFeedPostsWrapper2()">{{newPostsLength}} New Posts Added</a>
-</div>
-<div id="" *ngFor="let post of friendlyPosts">
-  <div class="" style="margin-bottom: 10px">
-    <span>Post key: </span>{{post.$key}}
-    <div><span>Post text: </span>{{post.text}}</div>
-    <!-- <img src="" alt=""> -->
-    <div [ngStyle]="{'background-image': 'url(' + post.author.profile_picture + ')', 'width': '30px', 'height': '30px',  'background-size': 'cover' }"></div>
-    <div>{{post.author.full_name}}</div>
-    <div>{{post.text}}</div>
-    <div>{{post.timestamp}}</div>
-    <div class="mfp-image" [style.background]="getBackgroundImage(post.thumb_url)">hello</div>
-    <fp-like [postKey]="post.$key"></fp-like>
-</div>
+</div> -->
+<section id="home-feed" class="mfp-content" fxLayout="row" fxLayoutAlign="center start">
+  <div class="mf-section-content-container" fxFlex.xs="100" fxFlex.gt-xs="60">
+    <div *ngIf="newPostsLength" id="" class="">
+      <a mat-raised-button (click)="getHomeFeedPostsWrapper2()">{{newPostsLength}} New Posts Added</a>
+    </div>
 
-  <fp-comments [postKey]="post.$key"></fp-comments>
-</div>
 
-<hr>
-<div id="" class="">
-  <a mat-raised-button (click)="addNextPage()">
-    next page
-    </a>
-</div>
+    <!-- feed posts -->
+    <!-- TODO: needs infinite scroll -->
+    <div class="mfp-posts-container">
+      <div class="mf-post" *ngFor="let post of friendlyPosts">
+
+        <mat-card>
+          <mat-card-content class="mfp-post-header">
+            <!-- <a [routerLink]="['/user', currentUserUid]">My Profile</a></div> -->
+            <button mat-button class="mfp-usernamelink" routerLink="['/user', currentUserUid]">
+                <div class="mf-avatar" [ngStyle]="{'background-image': 'url' + post.author.profile_picture + ')', 'width': '30px', 'height': '30px', 'background-size': 'cover'}"></div>
+                <div class="mfp-username">{{post.author.full_name}}</div>
+            </button>
+          </mat-card-content>
+
+          <!-- friendly picture -->
+          <div class="mfp-post-image" [style.background]="getBackgroundImage(post.thumb_url)"></div>
+
+          <mat-card-footer>
+            <!-- Users real-time likes -->
+            <fp-like [postKey]="post.$key"></fp-like>
+
+            <!-- Offers original comment -->
+            <div class="mfp-first-comment">
+              <span>
+                      <a routerLink="['/user', post.author.uid]">{{post.author.full_name}}</a>
+                  </span>
+              <span> {{post.text}}</span>
+            </div>
+
+            <!-- Users real-time comments -->
+            <fp-comments [postKey]="post.$key"></fp-comments>
+
+          </mat-card-footer>
+
+        </mat-card>
+
+      </div>
+      <!-- /mfp-post -->
+      <!-- More post button when not using infinite scroll-->
+      <div class="">
+        <a mat-raised-button (click)="addNextPage()">Next Page</a>
+      </div>
+
+    </div>
+    <!-- /posts container -->
+  </div>
+
+
+</section>
